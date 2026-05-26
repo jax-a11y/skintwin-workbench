@@ -7,7 +7,7 @@
 
 ## Overview
 
-The SkinTwin Cognitive Alchemist Workbench serves as the central nervous system for a revolutionary, AI-driven beauty-tech ecosystem. This platform integrates multiple components of the modern beauty industry—from AI-powered skin diagnostics to white-label manufacturing and salon management—into a unified cognitive architecture.
+The SkinTwin Cognitive Alchemist Workbench is implemented as a **Shopify app** that serves as the central nervous system for an AI-driven beauty-tech ecosystem. The app integrates AI diagnostics, white-label manufacturing, and salon operations while adding built-in **MRP (material requirements planning)** and **SCM (supply chain management)** orchestration.
 
 ## Architecture
 
@@ -23,6 +23,7 @@ The workbench integrates with four key pillars of the beauty-tech stack:
 
 | Pillar | Platform | Role |
 |--------|----------|------|
+| **Commerce Channel** | Shopify | Embedded app for storefront/admin workflows |
 | **AI Diagnostics** | Perfect Corp | Medical-grade skin analysis via API |
 | **B2B Management** | MioSalon | Salon/spa management SaaS |
 | **B2C Marketplace** | Welns.io / GoBeauty | Consumer booking platforms |
@@ -33,6 +34,7 @@ The workbench integrates with four key pillars of the beauty-tech stack:
 - [Alchemist Engine Specification](docs/Alchemist-Engine.md)
 - [Integration Analysis Report](docs/research/integration_analysis.md)
 - [API Specification](docs/api/openapi.json)
+- [Shopify App + MRP/SCM API Specification](docs/api/shopify-app-openapi.json)
 
 ### Research Notes
 
@@ -58,6 +60,11 @@ The workbench integrates with four key pillars of the beauty-tech stack:
 - Appointment booking integration
 - Client history and treatment tracking
 - Multi-location management
+
+### Shopify App + MRP/SCM Operations
+- Embedded Shopify app for product, order, and webhook workflows
+- MRP planning for formula demand, component requirements, and production lots
+- SCM orchestration for purchase orders, supplier lead times, and fulfillment updates
 
 ## Getting Started
 
