@@ -1,0 +1,413 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SkinTwin Shopify App API",
+    "version": "1.0.0",
+    "description": "API surface for the SkinTwin Shopify app, including integrated MRP and SCM workflows."
+  },
+  "servers": [
+    {
+      "url": "https://api.skintwin.ai"
+    }
+  ],
+  "tags": [
+    {
+      "name": "shopify",
+      "description": "Shopify app and webhook lifecycle endpoints"
+    },
+    {
+      "name": "mrp",
+      "description": "Material requirements planning endpoints"
+    },
+    {
+      "name": "scm",
+      "description": "Supply chain management endpoints"
+    }
+  ],
+  "paths": {
+    "/shopify/app/install": {
+      "post": {
+        "tags": [
+          "shopify"
+        ],
+        "summary": "Register or update a Shopify installation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShopifyInstallRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shop successfully connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShopifyInstallResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shopify/webhooks/orders-created": {
+      "post": {
+        "tags": [
+          "shopify",
+          "mrp"
+        ],
+        "summary": "Ingest Shopify order events and trigger MRP demand planning",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShopifyOrderCreatedWebhook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Order event accepted"
+          }
+        }
+      }
+    },
+    "/mrp/plans": {
+      "post": {
+        "tags": [
+          "mrp"
+        ],
+        "summary": "Generate a material requirements plan from demand signals",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MrpPlanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MRP plan generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MrpPlanResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scm/purchase-orders": {
+      "post": {
+        "tags": [
+          "scm"
+        ],
+        "summary": "Create supplier purchase orders from MRP outputs",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePurchaseOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Purchase order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scm/fulfillment-events": {
+      "post": {
+        "tags": [
+          "scm",
+          "shopify"
+        ],
+        "summary": "Synchronize fulfillment and shipment updates back to Shopify",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FulfillmentEvent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Fulfillment event accepted"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ShopifyInstallRequest": {
+        "type": "object",
+        "required": [
+          "shopDomain",
+          "accessToken",
+          "scopes"
+        ],
+        "properties": {
+          "shopDomain": {
+            "type": "string",
+            "example": "beauty-lab.myshopify.com"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ShopifyInstallResponse": {
+        "type": "object",
+        "required": [
+          "installationId",
+          "status"
+        ],
+        "properties": {
+          "installationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active"
+            ]
+          }
+        }
+      },
+      "ShopifyOrderCreatedWebhook": {
+        "type": "object",
+        "required": [
+          "orderId",
+          "shopDomain",
+          "lineItems"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "shopDomain": {
+            "type": "string"
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineItem"
+            }
+          }
+        }
+      },
+      "OrderLineItem": {
+        "type": "object",
+        "required": [
+          "sku",
+          "quantity"
+        ],
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "MrpPlanRequest": {
+        "type": "object",
+        "required": [
+          "planningHorizonDays",
+          "demand"
+        ],
+        "properties": {
+          "planningHorizonDays": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "demand": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DemandLine"
+            }
+          }
+        }
+      },
+      "DemandLine": {
+        "type": "object",
+        "required": [
+          "sku",
+          "requiredUnits"
+        ],
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "requiredUnits": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "MrpPlanResponse": {
+        "type": "object",
+        "required": [
+          "planId",
+          "materialRequirements"
+        ],
+        "properties": {
+          "planId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialRequirement"
+            }
+          }
+        }
+      },
+      "MaterialRequirement": {
+        "type": "object",
+        "required": [
+          "componentSku",
+          "requiredQuantity",
+          "requiredByDate"
+        ],
+        "properties": {
+          "componentSku": {
+            "type": "string"
+          },
+          "requiredQuantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "requiredByDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "CreatePurchaseOrderRequest": {
+        "type": "object",
+        "required": [
+          "supplierId",
+          "lines"
+        ],
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseOrderLine"
+            }
+          }
+        }
+      },
+      "PurchaseOrderLine": {
+        "type": "object",
+        "required": [
+          "componentSku",
+          "quantity"
+        ],
+        "properties": {
+          "componentSku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "PurchaseOrder": {
+        "type": "object",
+        "required": [
+          "purchaseOrderId",
+          "supplierId",
+          "status"
+        ],
+        "properties": {
+          "purchaseOrderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "issued",
+              "partially_received",
+              "received"
+            ]
+          }
+        }
+      },
+      "FulfillmentEvent": {
+        "type": "object",
+        "required": [
+          "orderId",
+          "status",
+          "carrier"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "packed",
+              "shipped",
+              "delivered"
+            ]
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "trackingNumber": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
