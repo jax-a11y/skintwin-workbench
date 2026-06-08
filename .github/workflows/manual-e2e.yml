@@ -1,0 +1,124 @@
+# Manual E2E Workflow
+# Allows targeted reruns by suite, environment, or specific test pattern
+
+name: Manual E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_pattern:
+        description: 'Test pattern to match (grep pattern)'
+        required: false
+        default: ''
+        type: string
+      test_file:
+        description: 'Specific test file to run (e.g., shopify-app.e2e.test.ts)'
+        required: false
+        default: ''
+        type: string
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'ci'
+        type: choice
+        options:
+          - ci
+          - staging
+          - production-dry-run
+      debug_mode:
+        description: 'Enable debug logging'
+        required: false
+        default: false
+        type: boolean
+      retry_count:
+        description: 'Number of retry attempts for failed tests'
+        required: false
+        default: '0'
+        type: choice
+        options:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+      capture_artifacts:
+        description: 'Capture extended artifacts (traces, logs)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  manual-e2e:
+    name: Manual E2E Run
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Display run configuration
+        run: |
+          echo "## Manual E2E Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | ${{ inputs.environment }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Pattern | ${{ inputs.test_pattern || 'All tests' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test File | ${{ inputs.test_file || 'All files' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Debug Mode | ${{ inputs.debug_mode }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Retry Count | ${{ inputs.retry_count }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Run E2E tests
+        run: |
+          TEST_ARGS=""
+          
+          if [ -n "${{ inputs.test_pattern }}" ]; then
+            TEST_ARGS="$TEST_ARGS --grep '${{ inputs.test_pattern }}'"
+          fi
+          
+          if [ -n "${{ inputs.test_file }}" ]; then
+            TEST_ARGS="$TEST_ARGS tests/e2e/${{ inputs.test_file }}"
+          fi
+          
+          if [ "${{ inputs.retry_count }}" != "0" ]; then
+            TEST_ARGS="$TEST_ARGS --retry ${{ inputs.retry_count }}"
+          fi
+          
+          npm run test:e2e -- $TEST_ARGS
+        env:
+          CI: true
+          DEBUG: ${{ inputs.debug_mode && 'true' || 'false' }}
+          TEST_ENVIRONMENT: ${{ inputs.environment }}
+
+      - name: Upload test results
+        if: always() && inputs.capture_artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-e2e-results-${{ github.run_id }}
+          path: |
+            test-results/
+            coverage/
+            logs/
+          retention-days: 30
+
+      - name: Generate result summary
+        if: always()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f test-results/summary.json ]; then
+            echo "Results available in artifacts."
+          else
+            echo "See job logs for detailed results."
+          fi

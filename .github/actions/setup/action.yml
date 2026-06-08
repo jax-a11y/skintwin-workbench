@@ -1,0 +1,62 @@
+# Reusable Setup Action
+# Centralizes Node.js setup, dependency caching, and common configuration
+
+name: 'Setup Environment'
+description: 'Sets up Node.js, caches dependencies, and installs packages'
+
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '20'
+  cache-key-prefix:
+    description: 'Prefix for cache key'
+    required: false
+    default: 'npm'
+  install-dependencies:
+    description: 'Whether to install npm dependencies'
+    required: false
+    default: 'true'
+
+outputs:
+  cache-hit:
+    description: 'Whether the cache was hit'
+    value: ${{ steps.cache-deps.outputs.cache-hit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+
+    - name: Cache npm dependencies
+      id: cache-deps
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ steps.npm-cache-dir.outputs.dir }}
+          node_modules
+        key: ${{ inputs.cache-key-prefix }}-${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+        restore-keys: |
+          ${{ inputs.cache-key-prefix }}-${{ runner.os }}-node-${{ inputs.node-version }}-
+          ${{ inputs.cache-key-prefix }}-${{ runner.os }}-node-
+
+    - name: Install dependencies
+      if: inputs.install-dependencies == 'true'
+      shell: bash
+      run: npm ci --prefer-offline || npm install
+
+    - name: Verify installation
+      shell: bash
+      run: |
+        echo "Node.js version: $(node --version)"
+        echo "npm version: $(npm --version)"
+        echo "Installed packages:"
+        npm list --depth=0 2>/dev/null || true

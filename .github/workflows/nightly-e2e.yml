@@ -1,0 +1,208 @@
+# Nightly E2E Workflow
+# Runs exhaustive end-to-end tests on schedule
+# Catches regressions and flaky behavior outside PR time budgets
+
+name: Nightly E2E
+
+on:
+  schedule:
+    # Run at 2:00 AM UTC every day
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - exhaustive
+          - negative-path
+          - state-transitions
+          - performance
+      environment:
+        description: 'Target environment'
+        required: false
+        default: 'ci'
+        type: choice
+        options:
+          - ci
+          - staging
+      debug_mode:
+        description: 'Enable debug logging'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────
+  # Contract Validation (pre-flight check)
+  # ─────────────────────────────────────────────────────────────────
+  contract-validation:
+    name: Contract Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Validate OpenAPI specs
+        run: npm run lint:openapi
+
+  # ─────────────────────────────────────────────────────────────────
+  # Exhaustive E2E Test Matrix
+  # ─────────────────────────────────────────────────────────────────
+  exhaustive-e2e:
+    name: Exhaustive E2E (${{ matrix.suite }})
+    runs-on: ubuntu-latest
+    needs: [contract-validation]
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - critical-path
+          - negative-path
+          - state-transitions
+          - contract-conformance
+          - edge-cases
+        include:
+          - suite: critical-path
+            grep: 'smoke|critical|happy-path'
+          - suite: negative-path
+            grep: 'negative|invalid|error|unauthorized'
+          - suite: state-transitions
+            grep: 'state|transition|lifecycle'
+          - suite: contract-conformance
+            grep: 'contract|schema|conformance'
+          - suite: edge-cases
+            grep: 'edge|boundary|idempotent|retry'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Run ${{ matrix.suite }} tests
+        run: npm run test:e2e -- --grep '${{ matrix.grep }}'
+        env:
+          CI: true
+          DEBUG: ${{ inputs.debug_mode && 'true' || 'false' }}
+          TEST_ENVIRONMENT: ${{ inputs.environment || 'ci' }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.suite }}
+          path: |
+            test-results/
+            coverage/
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────
+  # Performance Tests
+  # ─────────────────────────────────────────────────────────────────
+  performance-tests:
+    name: Performance Baseline Tests
+    runs-on: ubuntu-latest
+    needs: [contract-validation]
+    if: inputs.test_suite == 'all' || inputs.test_suite == 'performance' || github.event_name == 'schedule'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Run performance tests
+        run: npm run test:e2e -- --grep 'performance|latency|throughput'
+        env:
+          CI: true
+          PERFORMANCE_MODE: true
+
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            test-results/
+            performance-metrics/
+          retention-days: 90
+
+  # ─────────────────────────────────────────────────────────────────
+  # Nightly Summary and Flake Detection
+  # ─────────────────────────────────────────────────────────────────
+  nightly-summary:
+    name: Nightly Summary
+    runs-on: ubuntu-latest
+    needs: [exhaustive-e2e, performance-tests]
+    if: always()
+    steps:
+      - name: Generate summary report
+        run: |
+          echo "## Nightly E2E Summary - $(date -u +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Suite Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Exhaustive E2E | ${{ needs.exhaustive-e2e.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance | ${{ needs.performance-tests.result == 'success' && '✅ Passed' || (needs.performance-tests.result == 'skipped' && '⏭️ Skipped' || '❌ Failed') }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Run Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue for failures
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            const title = `Nightly E2E Failure - ${date}`;
+            const body = `## Nightly E2E Test Failure
+
+            **Date:** ${date}
+            **Run:** [View workflow run](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})
+            **Branch:** ${process.env.GITHUB_REF_NAME}
+            **Commit:** ${process.env.GITHUB_SHA}
+
+            ### Failed Jobs
+            - Exhaustive E2E: ${{ needs.exhaustive-e2e.result }}
+            - Performance: ${{ needs.performance-tests.result }}
+
+            ### Next Steps
+            1. Review the workflow run logs
+            2. Identify failing tests
+            3. Determine if failures are flaky or genuine regressions
+            4. Fix or quarantine failing tests
+
+            /cc @jax-a11y/maintainers
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['ci', 'nightly-failure', 'needs-triage']
+            });

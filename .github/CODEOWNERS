@@ -1,0 +1,15 @@
+# Code Owners
+# These owners will be requested for review when someone opens a pull request.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything
+* @jax-a11y/maintainers
+
+# API contracts require careful review
+docs/api/ @jax-a11y/maintainers @jax-a11y/api-team
+
+# CI/CD workflows
+.github/ @jax-a11y/maintainers @jax-a11y/devops
+
+# Test infrastructure
+tests/ @jax-a11y/maintainers @jax-a11y/qa

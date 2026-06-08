@@ -1,0 +1,17 @@
+{
+  "extends": ["spectral:oas"],
+  "rules": {
+    "info-contact": "warn",
+    "info-description": "warn",
+    "info-license": "warn",
+    "operation-operationId": "error",
+    "operation-description": "warn",
+    "operation-tags": "error",
+    "path-params": "error",
+    "no-$ref-siblings": "error",
+    "typed-enum": "warn",
+    "oas3-api-servers": "warn",
+    "oas3-parameter-description": "warn",
+    "oas3-valid-schema-example": "warn"
+  }
+}
