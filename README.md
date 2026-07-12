@@ -126,6 +126,12 @@ E2E tests cover:
 - ✅ **Contract Conformance**: Schema validation for all API responses
 - ✅ **Edge Cases**: Idempotency, duplicate handling, boundary conditions
 
+## Ecosystem
+
+This repository is part of the [SkinTwin-AI ecosystem](https://github.com/jax-a11y/skintwin-ecosystem-design)
+(layer: `governance`, role: `contracts-hub`). See [ECOSYSTEM.md](./ECOSYSTEM.md) for the contracts this repo
+provides and consumes, and the hub's registry for the full ecosystem map.
+
 ## License
 
 Copyright © 2026 SkinTwin AI. All rights reserved.
