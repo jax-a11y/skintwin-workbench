@@ -1,6 +1,6 @@
 # SkinTwin Cognitive Alchemist Workbench
 
-**AI-driven beauty-tech ecosystem integration platform**
+**AI-driven beauty-tech ecosystem integration platform.**
 
 [![Organization](https://img.shields.io/badge/org-skintwin--ai-blue)](https://github.com/skintwin-ai)
 [![Enterprise](https://img.shields.io/badge/enterprise-Kawaii-purple)](https://github.com/enterprises/kawaii)
@@ -48,22 +48,26 @@ The workbench integrates with four key pillars of the beauty-tech stack:
 ## Key Features
 
 ### AI Skin Analysis Integration
+
 - 16 skin concern detection (spots, wrinkles, pores, moisture, etc.)
 - 8 skin type classification
 - 95% test-retest reliability (dermatologist verified)
 - HIPAA and GDPR compliant
 
 ### Personalized Product Formulation
+
 - Integration with 800+ white-label formulas
 - Custom ingredient mapping based on skin analysis
 - Automated manufacturing and dropshipping
 
 ### Salon & Spa Orchestration
+
 - Appointment booking integration
 - Client history and treatment tracking
 - Multi-location management
 
 ### Shopify App + MRP/SCM Operations
+
 - Embedded Shopify app for product, order, and webhook workflows
 - MRP planning for formula demand, component requirements, and production lots
 - SCM orchestration for purchase orders, supplier lead times, and fulfillment updates
@@ -120,11 +124,18 @@ The repository includes comprehensive GitHub Actions workflows:
 ### Test Coverage
 
 E2E tests cover:
+
 - ✅ **Critical Path**: App install → Order webhook → MRP plan → Purchase order → Fulfillment
 - ✅ **Negative Scenarios**: Missing fields, invalid enums, constraint violations
 - ✅ **State Transitions**: Purchase order lifecycle, fulfillment status progression
 - ✅ **Contract Conformance**: Schema validation for all API responses
 - ✅ **Edge Cases**: Idempotency, duplicate handling, boundary conditions
+
+## Ecosystem
+
+This repository is part of the [SkinTwin-AI ecosystem](https://github.com/jax-a11y/skintwin-ecosystem-design)
+(layer: `governance`, role: `contracts-hub`). See [ECOSYSTEM.md](./ECOSYSTEM.md) for the contracts this repo
+provides and consumes, and the hub's registry for the full ecosystem map.
 
 ## License
 

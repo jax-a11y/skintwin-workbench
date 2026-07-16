@@ -65,7 +65,7 @@ jobs:
           go-version: '1.22'
 
       - name: Install oasdiff
-        run: go install github.com/tufin/oasdiff@latest
+        run: go install github.com/oasdiff/oasdiff@latest
 
       - name: Check for breaking changes in Shopify App API
         run: |

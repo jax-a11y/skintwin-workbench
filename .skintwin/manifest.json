@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jax-a11y/skintwin-ecosystem-design/main/schemas/ecosystem-manifest.schema.json",
+  "manifestVersion": "1.0",
+  "github": "jax-a11y/skintwin-workbench",
+  "layer": "governance",
+  "role": "contracts-hub",
+  "description": "SkinTwin Cognitive Alchemist Workbench: contract-and-docs hub for the Shopify app 'central nervous system', MRP and workbench OpenAPI specs with Spectral linting and MSW mocks.",
+  "designAlias": "skintwin (Alchemist Engine spec)",
+  "gatewayPrefix": null,
+  "provides": [
+    "alchemist-engine-spec"
+  ],
+  "consumes": [
+    "procurement-api"
+  ],
+  "events": {
+    "publishes": [],
+    "subscribes": []
+  },
+  "ci": {
+    "workflows": [
+      "pr-checks.yml (Spectral OpenAPI lint, oasdiff breaking-change check)"
+    ],
+    "usesReusable": false
+  },
+  "registry": "https://github.com/jax-a11y/skintwin-ecosystem-design/blob/main/registry/ecosystem.json"
+}

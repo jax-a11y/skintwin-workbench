@@ -16,7 +16,7 @@
       "altText": "YouCam API",
       "href": "https://yce.makeupar.com"
     },
-    "description": "# API Document\nLast modified: Jan. 5, 2026 24b4715\n\nThe YouCam APIs are series of AI effects that let you beautify your photos, as well as generate amazing aesthetic creations beyond human imagination. Let the magic begin.\n\nPLEASE NOTE that by reading this API documentation, or by setting up code pursuant to the instructions in this API documentation, you acknowledge it adheres to Perfect Corp's [Privacy policy](https://www.makeupar.com/youcamapps/youcam/privacy-policy.html), and [Terms of Service](https://www.makeupar.com/perfectbeauty/youcam/terms-of-service-api). And If you have any issue, please contact: [YouCamOnlineEditor_API@perfectcorp.com](mailto:YouCamOnlineEditor_API@perfectcorp.com)\n\n\n![YouCam API](https://bcw-media.s3.ap-northeast-1.amazonaws.com/strapi/assets/YCO_AI_API.png \"YouCam API\")\n\n## Introduction\n[YouCam API](https://yce.makeupar.com/) is a powerful and easy-to-use AI platform that provides beautiful and true-to-life visual effects thanks to the latest AI technology. This API document will briefly introduce how to integrate these awesome AI effects into your business. YouCam API are standard RESTful APIs to let you easily integrate to your website, e-commerce platforms, iOS/Android APP, applets, mini-programs, and more.\n\n![YouCam API](https://d3anovxlgi5hpq.cloudfront.net/assets/images/aiApi/banner/yce-topbanner-dt.png \"YouCam API\")\n\n## API Server\nThe YouCam APIs are built on top of RESTful web APIs. The API server is the host of all APIs. Once you complete the authentication, you can start your AI tasks through the API Server.\n- ### YouCam API server:\n    https://yce-api-01.makeupar.com\n\n## Rate Limit\nTo ensure fair usage and prevent abuse, our API implements rate limiting. There are two types of rate limits:\n\n- ### Per IP Address\n    Each IP address is allowed a maximum of 250 requests per 300 seconds with 5 queries per second(QPS). If this limit is exceeded, subsequent requests will receive a `429 Too Many Requests` error.\n\n- ### Per Access Token\n    Each access token is allowed a maximum of 250 requests per 300 seconds with 5 queries per second(QPS). If this limit is exceeded, subsequent requests will receive a `429 Too Many Requests` error.\n\nBoth conditions must be met for a request to be accepted. If either condition is not met, the request will receive a `429 Too Many Requests` error. Please note that each query related to unit will be processed real-time. Other APIs can use the access token util expired.\n\nIt is recommended that you handle rate limit errors gracefully in your application by implementing the appropriate backoff and retry mechanisms.\n\n\n## File Retention Period\n\nAny files you upload are stored on our server for **24 hours**, and then they're automatically deleted.\nProcessed results are retained for **24 hours** after completion.\n\n> **Warning:** Even though those result files are still good for 7 days, the link to download them might only be active for about two hours after they're created. If that download link expires, you can still access the file using its file ID – you can use that ID with another feature to get it.\n\n\n## Supported Formats & Dimensions\n|AI Photo Editing|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Photo Enhance|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Colorize|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Color Correction|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Lighting|4096x4096 (long side <= 4096, short side >= 256)|< 10MB|jpg/jpeg/png|\n|AI Image Extender|Input: long side <= 4096, Output: short side <= 1024, long side <= 2048|< 10MB|jpg/jpeg/png|\n|AI Replace|Input: long side <= 4096, Output: short side <= 1024, long side <= 2048|< 10MB|jpg/jpeg/png|\n|AI Object Removal|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Image Generator|Input: long side <= 4096, Output: long side <= 1024|< 10MB|jpg/jpeg/png|\n|Al Photo Background Removal|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Background Blur|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Background Change|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n\n|AI Portrait|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Avatar Generator|Input: long side <= 4096, Output: long side <= 1024|< 10MB|jpg/jpeg/png|\n|AI Face Swap|4096x4096 (long side <= 4096), single face only, need to show full face|< 10MB|jpg/jpeg/png|\n\n|AI Video Editing|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Video Enhance|input: long side <= 1920; output: max 2x input resolution, up to 60 sec, 30 FPS, 8 bit|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3;|\n|AI Video Face Swap|input: long side <= 4096; output: 1280x720, 30 FPS, up to 30 sec, 8 bit, single face only|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3|\n|AI Video Style Transfer|input: long side <= 4096; output: long side <= 1280, 16 FPS, up to 30 sec, 8 bit|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3|\n\n## Error Codes\n- Successful responses (100 - 399)\n- Client error responses (400 - 499)\n- Server error response (500 - 599)\n\n| General Error Code | Description |\n| ------------------ | ----------- |\n| exceed_max_filesize | The input file size exceeds the maximum limit |\n| invalid_parameter | The parameter value is invalid |\n| error_download_image | There was an error downloading the source image |\n| error_download_mask | There was an error downloading the mask image |\n| error_decode_image | There was an error decoding the source image |\n| error_decode_mask | There was an error decoding the mask image |\n| error_download_video | There was an error downloading the source video |\n| error_decode_video | There was an error decoding the source video |\n| error_nsfw_content_detected | NSFW content was detected in the source image |\n| error_no_face | No face was detected in the source image |\n| error_pose | Failed to detect pose in the source image |\n| error_face_parsing | Failed to perform face parsing on the source image |\n| error_inference | An error occurred in the inference pipeline |\n| exceed_nsfw_retry_limits | Retry limits exceeded to avoid generating NSFW image |\n| error_upload | There was an error uploading the result image |\n| error_multiple_people | Multiple people were detected in the source image |\n| error_no_shoulder | Shoulders are not visible in the source image |\n| error_large_face_angle | The face angle in the uploaded image is too large |\n| error_hair_too_short | The input hair is too short |\n| error_unexpected_video_duration | The video duration does not match the expected duration |\n| error_bald_image | The input hairstyle is bald |\n| error_unsupport_ratio | The aspect ratio of the input image is unsupported |\n| unknown_internal_error | Other internal errors |\n\n---\n\n# Quick Start Guide\nFirst, you need to register a YouCam API account for free at [https://yce.makeupar.com/](https://yce.makeupar.com/). You can then purchase or subscribe to get your units to use the service. You can see your subscription plan, pay as you go units, and your usage record at [https://yce.makeupar.com/api-console/en/api-keys/](https://yce.makeupar.com/api-console/en/api-keys/). You can go to the API Key tab under your account page to generate and maintain your API keys to start using the YouCam API.\n\n\n## V2 API\n\n### **Overview**\nStarting from **API version v1.5**, we have introduced a **simplified V2 API** to streamline integration processes.\n\n**Scope:**\nStarting from **API version v1.7**, all YouCam APIs are supported V2 API.\n\n> **Note:** V2 API is designed for workflow simplification only. It does not introduce advanced functionality. Both V1 APIs and V2 APIs use the same underlying AI models.\n\nV1 API legacy API document: [https://yce.makeupar.com/document/v1.x/index.html](https://yce.makeupar.com/document/v1.x/index.html)\n\n---\n\n### **Key Changes in V2 API**\n\n#### **1. Endpoint Reduction**\nThere is no need to call a separate authentication API to complete the authentication process.\n  - **V1 API Endpoints:**\n    - `POST /s2s/v1.0/client/auth` – Authentication\n    - `POST /s2s/v1.1/file/ai-task` – Upload a file\n    - `POST /s2s/v1.0/task/ai-task` – Run an AI task\n    - `GET /s2s/v1.0/task/ai-task` – Get the result\n\n  - **V2 API Endpoints:**\n    - `POST /s2s/v2.0/file/ai-task` – Upload a file or provide a file URL\n    - `POST /s2s/v2.0/task/ai-task` – Run an AI task\n    - `GET /s2s/v2.0/task/ai-task` – Get the result\n\n> **Warning:** Ensure that you replace the placeholder **`ai-task`** with the exact AI feature name supported by the API (for example, **`skin-analysis`**, **`cloth`**, **`hair-style`**, **`makeup-vto`**, or **`skin-tone-analysis`**). Using an incorrect or generic placeholder will result in an invalid request or API error. Always refer to the latest API specification for the list of valid feature identifiers.\n\n#### **2. Authentication**\n- **V1 API:** Requires explicit call to Authentication endpoint.- **V2 API:** No separate authentication endpoint.  - Include your API key in the request header using **Bearer Token**:\n    ```\n    Authorization: Bearer YOUR_API_KEY\n    ```\nYou can find your API Key at https://yce.makeupar.com/api-console/en/api-keys/.\n\n#### **3. Image Input**\n- Supports **both file upload and file URL** as input sources.\n\n#### **4. Polling Mechanism**\n- Processed results are retained for **24 hours** after completion.\n- No need for short-interval polling.\n- Flexible polling intervals within the 24-hour window.\n- **Important:** Polling is still required to check task status, as execution time is not guaranteed.\n\n#### **5. JSON Structure Simplification**\n- **List Style API** now uses a simplified JSON parameter structure.\n  - AI Hairstyle Generator: https://yce-api-01.makeupar.com/s2s/v2.0/task/template/hair-style\n  - AI Clothes: https://yce-api-01.makeupar.com/s2s/v2.0/task/template/cloth\n\n---\n\n### **Summary**\n- **V2 API = Simplified workflow, same AI models.**- Reduced endpoints, easier authentication, flexible input options, improved polling, and cleaner JSON.\n\n---\n\n## Release Notes\n\n### v1.7 – 2025-12-29\n\n#### Overview\n\n- All YouCam AI APIs now support the simplified V2 API structure.\n- AI Skin Analysis API optimisation:\n  - Accepts any number of skin concerns as input. You may specify as many concerns as required. However, SD and HD Skin Analysis cannot be mixed in a single request. The call must include either all SD concerns or all HD concerns.\n  - Returns result images and scores directly in the output response rather than in a single ZIP file, allowing you to parse the scores first and download detection masks separately.\n- JS Camera Kit:\n  - Supports new types ('ring', 'wrist', 'necklace', and 'earring')\n- MCP support: See [MCP](#tag/MCP)\n  - Supports common MCP clients.\n  - Now supports 18 APIs.\n\n#### New Features\n\n##### Fashion API\n- [AI Bag](#tag/AI-Bag)\n- [AI Scarf](#tag/AI-Scarf)\n- [AI Shoes](#tag/AI-Shoes)\n- [AI Hat](#tag/AI-Hat)\n\n##### Jewelry & Watch API\n- [AI Ring Virtual Try-On](#tag/AI-Ring-Virtual-Try-On)\n- [AI Bracelet Virtual Try-On](#tag/AI-Bracelet-Virtual-Try-On)\n- [AI Watch Virtual Try-On](#tag/AI-Watch-Virtual-Try-On)\n- [AI Earring Virtual Try-On](#tag/AI-Earring-Virtual-Try-On)\n- [AI Necklace Virtual Try-On](#tag/AI-Necklace-Virtual-Try-On)\n\n---\n\n\n# FAQ\n## Q&A Hub\n1. **Q: What does 'Unit' mean, and how is it used?**\n    </br>**A:** Please note that credits are exclusively used within the YouCam Online Editor UI, whereas units are designated solely for AI API usage. Throughout this document, all references to 'credit' or 'unit' pertain to the Unit.\n    </br>\n    Please check the page https://yce.makeupar.com/ai-api for details on how many units each AI feature consumes.\n    </br></br>\n\n1. **Q: Why am I getting InvalidTaskId error?**\n    </br>**A:** You will get a ***InvalidTaskId*** error once you check the status of a timed out task. So, once you run an AI task, you need to **polling** to check the status within the ***polling_interval*** until the status become either *success* or *error*.\n    </br></br>\n\n1. **Q: What is client_id, client_secret and id_token?**\n    </br>**A:** Your API Key is the ***client_id*** and the Secret key is the ***client_secret***. And please follow the Quick start guide to get the ***id_token*** to complete the authentication process.\n\n    For more information and questions, please refer to our [blog page](https://www.makeupar.com/consumer/blog) and the [FAQ page](https://yce.makeupar.com/faq). Or send an e-mail to [YouCamOnlineEditor_API@perfectcorp.com](mailto:YouCamOnlineEditor_API@perfectcorp.com). Our customer success team are very happy to help. ;)\n    </br></br>\n\n1. **Q: How to uplaod an image through curl?**\n    </br>**A:** curl --location --request PUT '{url_api_response}' --header '{headers_in_api_response}' --data-binary @'{local_file_path}'\n    ```\n    curl --location --request PUT 'https://yce-us.s3-accelerate.amazonaws.com/ttl30/320554715144259928/77022501909/v2/aeMNNB0KmUIP8rnQ996tC5Q/49c9f5cb-882c-41d9-a435-73b951cdf018.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250507T110821Z&X-Amz-SignedHeaders=content-length%3Bcontent-type%3Bhost&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5Y5D7DAE3S%2F20250507%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=efaeed8fd3da03be0f0c9ed1274325651ef2adffb51321cc489f6baa4a80e394' --header 'Content-Type: image/jpg' --header 'Content-Length: 50000'  --data-binary @'./test.jpg'\n    ```\n    </br></br>\n\n1. **Q: What platforms does the AI API support? Can it be used on mobile devices?**\n    </br>**A:** The AI API works seamlessly across different platforms. Since it's built on a standard RESTful API, you can use it for server-to-server communication, on mobile devices, or in a web browser - whatever best fits your needs.\n    </br></br>\n\n1. **Q: Is it possible to use the AI API with Flutter on both Android and iOS?**\n    </br>**A:**\n        Absolutely. Since AI APIs are standard RESTful APIs, you can access them using Flutter's built-in HTTP APIs to make requests.\n\n    Here are some official Flutter documents on making network queries.\n    * https://docs.flutter.dev/cookbook/networking/fetch-data\n    * https://pub.dev/packages/http\n\n    And here’s a simple way to call a http GET with Bearer Authentication using Flutter’s http package:\n    ```dart\n    import 'dart:convert';\n    import 'package:http/http.dart' as http;\n\n    Future<void> fetchData() async {\n        String token = \"your_bearer_token_here\"; // Replace with your actual token\n\n        final response = await http.get(\n            Uri.parse(\"https://yce-api-01.makeupar.com/s2s/v1.0/task/ai-task\"), // Replace the `ai-task` with the AI feature you intend to use.\n            headers: {\n            \"Content-Type\": \"application/json\",\n            \"Authorization\": \"Bearer $token\",\n            },\n        );\n\n        if (response.statusCode == 200) {\n            print(\"Data fetched successfully: ${response.body}\");\n        } else {\n            print(\"Failed to fetch data: ${response.statusCode}\");\n        }\n    }\n    ```\n    Key Steps to Auth:\n    - Retrieve the Token – You can store and retrieve the token using SharedPreferences or another secure storage method.\n    - Include the Token in Headers – Use \"Authorization\": \"Bearer $token\" in the request headers.\n    - Handle Expired Tokens – If the API returns a 401 InvalidAccessToken error, refresh the token if needed.\n    </br></br>\n\n1. **Q: API key is the API key,  Where can I find the secret key?**\n    </br>**A:** The secret key is created only when you first generate it. So make sure to save it right away, you won't be able to see it again later.\n    </br></br>\n\n1. **Q: Is it possible to integrate AI APIs into your website using Wix?**\n    </br>**A:** We do not currently have an official integration guide for using AI APIs with Wix. However, the RESTful API itself does not impose any restrictions on the platform, provided it supports standard web queries.\n\n    We strongly recommend to begin by reading the official documentation provided by Wix: https://dev.wix.com/docs/develop-websites/articles/get-started/integrate-with-3rd-parties\n\n    Wix offers several methods for integrating with third-party APIs, primarily through its Velo development platform:\n\n    * Fetch API:\n    This is the most common method and an implementation of the standard JavaScript Fetch API. It allows you to make HTTP requests to external APIs from your Wix site's frontend or backend code.\n        Backend calls: Recommended for security (especially for APIs requiring keys) and to avoid CORS issues. Use the Secrets Manager to securely store API keys.\n        Frontend calls: Possible but less secure and may encounter CORS restrictions.\n\n    * npm Packages:\n    Velo supports the use of approved npm packages, allowing you to leverage a wide array of prebuilt JavaScript modules to extend your site's functionality with third-party features.\n\n    * Service Plugins (formerly SPIs/Custom Extensions):\n    These enable you to inject custom logic or integrate third-party services directly into Wix's business solutions (e.g., Wix Stores, Wix Bookings). Service plugins allow you to customize specific parts of existing app flows or integrate external services for functionalities like custom shipping rates, dynamic pricing, or alternative payment providers.\n\n    * HTTP Functions:\n    You can expose your site's functionality as an API, allowing third-party services to call your Wix site''s backend functions and interact with your site's data or logic.\n\n    Steps for Integration (using Fetch API as an example):\n\n    * Store API Keys: If the third-party API requires authentication, store sensitive credentials like API keys securely in Wix's Secrets Manager.\n    Import wix-fetch: In your Velo backend or frontend code, import the wixFetch module.\n\n        ```JavaScript\n        import { fetch } from 'wix-fetch';\n        ```\n\n    * Make API Calls: Use the fetch function to send requests to the third-party API, including necessary headers and body data.\n\n        ```JavaScript\n        export async function getWeatherData() {\n            const apiKey = await getSecret(\"yourApiKeyName\"); // Retrieve from Secrets Manager\n            const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=London`, {\n                method: 'GET',\n                headers: {\n                    'Content-Type': 'application/json'\n                }\n            });\n            const data = await response.json();\n            return data;\n        }\n        ```\n\n    * Handle Responses: Process the data received from the API and integrate it into your site's design or functionality.\n    </br></br>\n\n1. **Q: Is it possible to integrate AI APIs into WooCommerce?**\n    </br>**A:** We do not currently have an official integration guide for using AI APIs with WooCommerce. However, the RESTful API itself does not impose any restrictions on the platform, provided it supports standard web queries.\n\n    We strongly recommend to begin by reading the official documentation provided by WooCommerce: https://woocommerce.com/document/woocommerce-rest-api/\n\n    Integrating third-party APIs with WooCommerce enhances store functionality and streamlines operations. This can be achieved through various methods:\n\n    * Utilizing WooCommerce REST API:\n\n        WooCommerce provides a robust REST API that allows external applications to interact with your store data.\n        You can create API keys with specific permissions (Read, Write, or Read/Write) in WooCommerce > Settings > Advanced > REST API.\n        This enables you to automate tasks like inventory syncing, order processing, customer data synchronization, and more, by building custom integrations or using third-party services that leverage this API.\n\n    * Employing Plugins:\n\n        Many WordPress and WooCommerce plugins are designed specifically for integrating with popular third-party services like payment gateways, shipping carriers, CRM systems, and accounting software.\n        Plugins often offer pre-built integrations, simplifying the setup process and reducing the need for custom coding.\n        Examples include plugins for specific payment processors (e.g., Stripe, PayPal), shipping solutions (e.g., FedEx, USPS), or general API integration tools like WPGet API.\n\n    * Custom Code and Webhooks:\n\n        For unique integration needs or when a suitable plugin isn't available, you can implement custom code within your WordPress theme or a custom plugin.\n        This involves using WordPress/WooCommerce hooks and filters to trigger API calls at specific events (e.g., woocommerce_payment_complete for post-purchase actions).\n        Webhooks can also be used to send real-time data from WooCommerce to a third-party service when certain events occur (e.g., new order, product update).\n    </br></br>\n\n## Debugging Guide\n1. **Invalid TaskId Error**\n    </br>**Why:** You’ll receive an InvalidTaskId error if you attempt to check the status of a task that has timed out. Therefore, once an AI task is initiated, you’ll need to poll for its status within the polling_interval until the status changes to either success or error.\n    </br>**Solution:** To avoid the task becoming invalid, it’s necessary to implement a timed loop that queries the task status at regular intervals within the allowed polling window.\n\n1. **500 Server Error / unknown_internal_error**\n    </br>**A:** ***Important***: Simply calling the File API does not upload your file. You must manually upload the file to the URL provided in the File API response. That URL is your upload destination, make sure the file is successfully transferred there before proceeding.<br>\n    Before calling the AI API, ensure your file has been successfully uploaded. Use the File API to retrieve an upload URL, then upload your file to that location. Once the upload is complete, you'll receive a ***file_id*** in the response, this ID is what you'll use to access AI features related to that file.\n    </br></br>\n\n1. **404 Not Found error when using AI APIs**\n    </br>**A:** ***Important***: Simply calling the File API does not upload your file. You must manually upload the file to the URL provided in the File API response. That URL is your upload destination, make sure the file is successfully transferred there before proceeding.<br>\n    Before calling the AI API, ensure your file has been successfully uploaded. Use the File API to retrieve an upload URL, then upload your file to that location. Once the upload is complete, you'll receive a ***file_id*** in the response, this ID is what you'll use to access AI features related to that file.\n    </br></br>\n\n1. **The API response returns the same style ID on the Postman**\n    </br>**A:** The is because Postman (Pretty view) and Chrome use JavaScript to parse JSON responses. In JavaScript, numbers larger than 9007199254740991 (2^53-1) cannot be represented precisely. They are rounded to the nearest representable value, which makes different IDs appear identical (e.g., 219691778809271815 → 219691778809271800).</br>\n    * Precision Loss in JavaScript/JSON Error Handling\n      * Cause: JavaScript's Number type cannot safely handle integers beyond 2^53 - 1, leading to silent truncation or rounding.\n      * Solution: Use a JSON parser like ***json-bigint*** to treat IDs as strings and retain full precision.\n    </br></br>\n\n1. **Beard Authentication 400 Error**\n    </br>**A:** When using the V2 API, you must include your API key in every request by adding a Bearer authorization header. Failure to do so will result in authentication errors.\n    **Valid Request Header Format**\n    ```\n    Authorization: Bearer YOUR_API_KEY\n    ```\n    **Common Issues**\n\n    1.  **Missing Bearer Prefix**\n        The `Authorization` header must start with `Bearer` followed by the API key.\n        Example:\n        ```\n        Authorization: YOUR_API_KEY\n        ```\n\n    1.  **Unnecessary Characters**\n        Do not include angle brackets `<` or `>` around the API key. These characters are not required and will cause the request to fail.\n        Example:\n        ```\n        Authorization: Bearer <YOUR_API_KEY>\n        ```\n\n    2.  **Incorrect API Key**\n        Ensure that the API key provided in the `Authorization` header is correct and active.\n"
+    "description": "# API Document\nLast modified: Jan. 5, 2026 24b4715\n\nThe YouCam APIs are series of AI effects that let you beautify your photos, as well as generate amazing aesthetic creations beyond human imagination. Let the magic begin.\n\nPLEASE NOTE that by reading this API documentation, or by setting up code pursuant to the instructions in this API documentation, you acknowledge it adheres to Perfect Corp's [Privacy policy](https://www.makeupar.com/youcamapps/youcam/privacy-policy.html), and [Terms of Service](https://www.makeupar.com/perfectbeauty/youcam/terms-of-service-api). And If you have any issue, please contact: [YouCamOnlineEditor_API@perfectcorp.com](mailto:YouCamOnlineEditor_API@perfectcorp.com)\n\n\n![YouCam API](https://bcw-media.s3.ap-northeast-1.amazonaws.com/strapi/assets/YCO_AI_API.png \"YouCam API\")\n\n## Introduction\n[YouCam API](https://yce.makeupar.com/) is a powerful and easy-to-use AI platform that provides beautiful and true-to-life visual effects thanks to the latest AI technology. This API document will briefly introduce how to integrate these awesome AI effects into your business. YouCam API are standard RESTful APIs to let you easily integrate to your website, e-commerce platforms, iOS/Android APP, applets, mini-programs, and more.\n\n![YouCam API](https://d3anovxlgi5hpq.cloudfront.net/assets/images/aiApi/banner/yce-topbanner-dt.png \"YouCam API\")\n\n## API Server\nThe YouCam APIs are built on top of RESTful web APIs. The API server is the host of all APIs. Once you complete the authentication, you can start your AI tasks through the API Server.\n- ### YouCam API server:\n    https://yce-api-01.makeupar.com\n\n## Rate Limit\nTo ensure fair usage and prevent abuse, our API implements rate limiting. There are two types of rate limits:\n\n- ### Per IP Address\n    Each IP address is allowed a maximum of 250 requests per 300 seconds with 5 queries per second(QPS). If this limit is exceeded, subsequent requests will receive a `429 Too Many Requests` error.\n\n- ### Per Access Token\n    Each access token is allowed a maximum of 250 requests per 300 seconds with 5 queries per second(QPS). If this limit is exceeded, subsequent requests will receive a `429 Too Many Requests` error.\n\nBoth conditions must be met for a request to be accepted. If either condition is not met, the request will receive a `429 Too Many Requests` error. Please note that each query related to unit will be processed real-time. Other APIs can use the access token util expired.\n\nIt is recommended that you handle rate limit errors gracefully in your application by implementing the appropriate backoff and retry mechanisms.\n\n\n## File Retention Period\n\nAny files you upload are stored on our server for **24 hours**, and then they're automatically deleted.\nProcessed results are retained for **24 hours** after completion.\n\n> **Warning:** Even though those result files are still good for 7 days, the link to download them might only be active for about two hours after they're created. If that download link expires, you can still access the file using its file ID – you can use that ID with another feature to get it.\n\n\n## Supported Formats & Dimensions\n|AI Photo Editing|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Photo Enhance|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Colorize|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Color Correction|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Lighting|4096x4096 (long side <= 4096, short side >= 256)|< 10MB|jpg/jpeg/png|\n|AI Image Extender|Input: long side <= 4096, Output: short side <= 1024, long side <= 2048|< 10MB|jpg/jpeg/png|\n|AI Replace|Input: long side <= 4096, Output: short side <= 1024, long side <= 2048|< 10MB|jpg/jpeg/png|\n|AI Object Removal|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Image Generator|Input: long side <= 4096, Output: long side <= 1024|< 10MB|jpg/jpeg/png|\n|Al Photo Background Removal|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Background Blur|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n|AI Photo Background Change|Input: long side <= 4096, Output: long side <= 4096|< 10MB|jpg/jpeg/png|\n\n|AI Portrait|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Avatar Generator|Input: long side <= 4096, Output: long side <= 1024|< 10MB|jpg/jpeg/png|\n|AI Face Swap|4096x4096 (long side <= 4096), single face only, need to show full face|< 10MB|jpg/jpeg/png|\n\n|AI Video Editing|Supported Dimensions|Supported File Size|Supported Formats|\n|  ----  | ----  | ----  | ----  |\n|AI Video Enhance|input: long side <= 1920; output: max 2x input resolution, up to 60 sec, 30 FPS, 8 bit|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3;|\n|AI Video Face Swap|input: long side <= 4096; output: 1280x720, 30 FPS, up to 30 sec, 8 bit, single face only|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3|\n|AI Video Style Transfer|input: long side <= 4096; output: long side <= 1280, 16 FPS, up to 30 sec, 8 bit|<100MB|container: mov, mp4; video codec: MPEG-4, H.264 AVC; audio codec: aac, mp3|\n\n## Error Codes\n- Successful responses (100 - 399)\n- Client error responses (400 - 499)\n- Server error response (500 - 599)\n\n| General Error Code | Description |\n| ------------------ | ----------- |\n| exceed_max_filesize | The input file size exceeds the maximum limit |\n| invalid_parameter | The parameter value is invalid |\n| error_download_image | There was an error downloading the source image |\n| error_download_mask | There was an error downloading the mask image |\n| error_decode_image | There was an error decoding the source image |\n| error_decode_mask | There was an error decoding the mask image |\n| error_download_video | There was an error downloading the source video |\n| error_decode_video | There was an error decoding the source video |\n| error_nsfw_content_detected | NSFW content was detected in the source image |\n| error_no_face | No face was detected in the source image |\n| error_pose | Failed to detect pose in the source image |\n| error_face_parsing | Failed to perform face parsing on the source image |\n| error_inference | An error occurred in the inference pipeline |\n| exceed_nsfw_retry_limits | Retry limits exceeded to avoid generating NSFW image |\n| error_upload | There was an error uploading the result image |\n| error_multiple_people | Multiple people were detected in the source image |\n| error_no_shoulder | Shoulders are not visible in the source image |\n| error_large_face_angle | The face angle in the uploaded image is too large |\n| error_hair_too_short | The input hair is too short |\n| error_unexpected_video_duration | The video duration does not match the expected duration |\n| error_bald_image | The input hairstyle is bald |\n| error_unsupport_ratio | The aspect ratio of the input image is unsupported |\n| unknown_internal_error | Other internal errors |\n\n---\n\n# Quick Start Guide\nFirst, you need to register a YouCam API account for free at [https://yce.makeupar.com/](https://yce.makeupar.com/). You can then purchase or subscribe to get your units to use the service. You can see your subscription plan, pay as you go units, and your usage record at [https://yce.makeupar.com/api-console/en/api-keys/](https://yce.makeupar.com/api-console/en/api-keys/). You can go to the API Key tab under your account page to generate and maintain your API keys to start using the YouCam API.\n\n\n## V2 API\n\n### **Overview**\nStarting from **API version v1.5**, we have introduced a **simplified V2 API** to streamline integration processes.\n\n**Scope:**\nStarting from **API version v1.7**, all YouCam APIs are supported V2 API.\n\n> **Note:** V2 API is designed for workflow simplification only. It does not introduce advanced functionality. Both V1 APIs and V2 APIs use the same underlying AI models.\n\nV1 API legacy API document: [https://yce.makeupar.com/document/v1.x/index.html](https://yce.makeupar.com/document/v1.x/index.html)\n\n---\n\n### **Key Changes in V2 API**\n\n#### **1. Endpoint Reduction**\nThere is no need to call a separate authentication API to complete the authentication process.\n  - **V1 API Endpoints:**\n    - `POST /s2s/v1.0/client/auth` – Authentication\n    - `POST /s2s/v1.1/file/ai-task` – Upload a file\n    - `POST /s2s/v1.0/task/ai-task` – Run an AI task\n    - `GET /s2s/v1.0/task/ai-task` – Get the result\n\n  - **V2 API Endpoints:**\n    - `POST /s2s/v2.0/file/ai-task` – Upload a file or provide a file URL\n    - `POST /s2s/v2.0/task/ai-task` – Run an AI task\n    - `GET /s2s/v2.0/task/ai-task` – Get the result\n\n> **Warning:** Ensure that you replace the placeholder **`ai-task`** with the exact AI feature name supported by the API (for example, **`skin-analysis`**, **`cloth`**, **`hair-style`**, **`makeup-vto`**, or **`skin-tone-analysis`**). Using an incorrect or generic placeholder will result in an invalid request or API error. Always refer to the latest API specification for the list of valid feature identifiers.\n\n#### **2. Authentication**\n- **V1 API:** Requires explicit call to Authentication endpoint.- **V2 API:** No separate authentication endpoint.  - Include your API key in the request header using **Bearer Token**:\n    ```\n    Authorization: Bearer YOUR_API_KEY\n    ```\nYou can find your API Key at https://yce.makeupar.com/api-console/en/api-keys/.\n\n#### **3. Image Input**\n- Supports **both file upload and file URL** as input sources.\n\n#### **4. Polling Mechanism**\n- Processed results are retained for **24 hours** after completion.\n- No need for short-interval polling.\n- Flexible polling intervals within the 24-hour window.\n- **Important:** Polling is still required to check task status, as execution time is not guaranteed.\n\n#### **5. JSON Structure Simplification**\n- **List Style API** now uses a simplified JSON parameter structure.\n  - AI Hairstyle Generator: https://yce-api-01.makeupar.com/s2s/v2.0/task/template/hair-style\n  - AI Clothes: https://yce-api-01.makeupar.com/s2s/v2.0/task/template/cloth\n\n---\n\n### **Summary**\n- **V2 API = Simplified workflow, same AI models.**- Reduced endpoints, easier authentication, flexible input options, improved polling, and cleaner JSON.\n\n---\n\n## Release Notes\n\n### v1.7 – 2025-12-29\n\n#### Overview\n\n- All YouCam AI APIs now support the simplified V2 API structure.\n- AI Skin Analysis API optimisation:\n  - Accepts any number of skin concerns as input. You may specify as many concerns as required. However, SD and HD Skin Analysis cannot be mixed in a single request. The call must include either all SD concerns or all HD concerns.\n  - Returns result images and scores directly in the output response rather than in a single ZIP file, allowing you to parse the scores first and download detection masks separately.\n- JS Camera Kit:\n  - Supports new types ('ring', 'wrist', 'necklace', and 'earring')\n- MCP support: See [MCP](#tag/MCP)\n  - Supports common MCP clients.\n  - Now supports 18 APIs.\n\n#### New Features\n\n##### Fashion API\n- [AI Bag](#tag/AI-Bag)\n- [AI Scarf](#tag/AI-Scarf)\n- [AI Shoes](#tag/AI-Shoes)\n- [AI Hat](#tag/AI-Hat)\n\n##### Jewelry & Watch API\n- [AI Ring Virtual Try-On](#tag/AI-Ring-Virtual-Try-On)\n- [AI Bracelet Virtual Try-On](#tag/AI-Bracelet-Virtual-Try-On)\n- [AI Watch Virtual Try-On](#tag/AI-Watch-Virtual-Try-On)\n- [AI Earring Virtual Try-On](#tag/AI-Earring-Virtual-Try-On)\n- [AI Necklace Virtual Try-On](#tag/AI-Necklace-Virtual-Try-On)\n\n---\n\n\n# FAQ\n## Q&A Hub\n1. **Q: What does 'Unit' mean, and how is it used?**\n    </br>**A:** Please note that credits are exclusively used within the YouCam Online Editor UI, whereas units are designated solely for AI API usage. Throughout this document, all references to 'credit' or 'unit' pertain to the Unit.\n    </br>\n    Please check the page https://yce.makeupar.com/ai-api for details on how many units each AI feature consumes.\n    </br></br>\n\n1. **Q: Why am I getting InvalidTaskId error?**\n    </br>**A:** You will get a ***InvalidTaskId*** error once you check the status of a timed out task. So, once you run an AI task, you need to **polling** to check the status within the ***polling_interval*** until the status become either *success* or *error*.\n    </br></br>\n\n1. **Q: What is client_id, client_secret and id_token?**\n    </br>**A:** Your API Key is the ***client_id*** and the Secret key is the ***client_secret***. And please follow the Quick start guide to get the ***id_token*** to complete the authentication process.\n\n    For more information and questions, please refer to our [blog page](https://www.makeupar.com/consumer/blog) and the [FAQ page](https://yce.makeupar.com/faq). Or send an e-mail to [YouCamOnlineEditor_API@perfectcorp.com](mailto:YouCamOnlineEditor_API@perfectcorp.com). Our customer success team are very happy to help. ;)\n    </br></br>\n\n1. **Q: How to uplaod an image through curl?**\n    </br>**A:** curl --location --request PUT '{url_api_response}' --header '{headers_in_api_response}' --data-binary @'{local_file_path}'\n    ```\n    curl --location --request PUT 'https://yce-us.s3-accelerate.amazonaws.com/ttl30/320554715144259928/77022501909/v2/aeMNNB0KmUIP8rnQ996tC5Q/49c9f5cb-882c-41d9-a435-73b951cdf018.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250507T110821Z&X-Amz-SignedHeaders=content-length%3Bcontent-type%3Bhost&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20250507%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=efaeed8fd3da03be0f0c9ed1274325651ef2adffb51321cc489f6baa4a80e394' --header 'Content-Type: image/jpg' --header 'Content-Length: 50000'  --data-binary @'./test.jpg'\n    ```\n    </br></br>\n\n1. **Q: What platforms does the AI API support? Can it be used on mobile devices?**\n    </br>**A:** The AI API works seamlessly across different platforms. Since it's built on a standard RESTful API, you can use it for server-to-server communication, on mobile devices, or in a web browser - whatever best fits your needs.\n    </br></br>\n\n1. **Q: Is it possible to use the AI API with Flutter on both Android and iOS?**\n    </br>**A:**\n        Absolutely. Since AI APIs are standard RESTful APIs, you can access them using Flutter's built-in HTTP APIs to make requests.\n\n    Here are some official Flutter documents on making network queries.\n    * https://docs.flutter.dev/cookbook/networking/fetch-data\n    * https://pub.dev/packages/http\n\n    And here’s a simple way to call a http GET with Bearer Authentication using Flutter’s http package:\n    ```dart\n    import 'dart:convert';\n    import 'package:http/http.dart' as http;\n\n    Future<void> fetchData() async {\n        String token = \"your_bearer_token_here\"; // Replace with your actual token\n\n        final response = await http.get(\n            Uri.parse(\"https://yce-api-01.makeupar.com/s2s/v1.0/task/ai-task\"), // Replace the `ai-task` with the AI feature you intend to use.\n            headers: {\n            \"Content-Type\": \"application/json\",\n            \"Authorization\": \"Bearer $token\",\n            },\n        );\n\n        if (response.statusCode == 200) {\n            print(\"Data fetched successfully: ${response.body}\");\n        } else {\n            print(\"Failed to fetch data: ${response.statusCode}\");\n        }\n    }\n    ```\n    Key Steps to Auth:\n    - Retrieve the Token – You can store and retrieve the token using SharedPreferences or another secure storage method.\n    - Include the Token in Headers – Use \"Authorization\": \"Bearer $token\" in the request headers.\n    - Handle Expired Tokens – If the API returns a 401 InvalidAccessToken error, refresh the token if needed.\n    </br></br>\n\n1. **Q: API key is the API key,  Where can I find the secret key?**\n    </br>**A:** The secret key is created only when you first generate it. So make sure to save it right away, you won't be able to see it again later.\n    </br></br>\n\n1. **Q: Is it possible to integrate AI APIs into your website using Wix?**\n    </br>**A:** We do not currently have an official integration guide for using AI APIs with Wix. However, the RESTful API itself does not impose any restrictions on the platform, provided it supports standard web queries.\n\n    We strongly recommend to begin by reading the official documentation provided by Wix: https://dev.wix.com/docs/develop-websites/articles/get-started/integrate-with-3rd-parties\n\n    Wix offers several methods for integrating with third-party APIs, primarily through its Velo development platform:\n\n    * Fetch API:\n    This is the most common method and an implementation of the standard JavaScript Fetch API. It allows you to make HTTP requests to external APIs from your Wix site's frontend or backend code.\n        Backend calls: Recommended for security (especially for APIs requiring keys) and to avoid CORS issues. Use the Secrets Manager to securely store API keys.\n        Frontend calls: Possible but less secure and may encounter CORS restrictions.\n\n    * npm Packages:\n    Velo supports the use of approved npm packages, allowing you to leverage a wide array of prebuilt JavaScript modules to extend your site's functionality with third-party features.\n\n    * Service Plugins (formerly SPIs/Custom Extensions):\n    These enable you to inject custom logic or integrate third-party services directly into Wix's business solutions (e.g., Wix Stores, Wix Bookings). Service plugins allow you to customize specific parts of existing app flows or integrate external services for functionalities like custom shipping rates, dynamic pricing, or alternative payment providers.\n\n    * HTTP Functions:\n    You can expose your site's functionality as an API, allowing third-party services to call your Wix site''s backend functions and interact with your site's data or logic.\n\n    Steps for Integration (using Fetch API as an example):\n\n    * Store API Keys: If the third-party API requires authentication, store sensitive credentials like API keys securely in Wix's Secrets Manager.\n    Import wix-fetch: In your Velo backend or frontend code, import the wixFetch module.\n\n        ```JavaScript\n        import { fetch } from 'wix-fetch';\n        ```\n\n    * Make API Calls: Use the fetch function to send requests to the third-party API, including necessary headers and body data.\n\n        ```JavaScript\n        export async function getWeatherData() {\n            const apiKey = await getSecret(\"yourApiKeyName\"); // Retrieve from Secrets Manager\n            const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=London`, {\n                method: 'GET',\n                headers: {\n                    'Content-Type': 'application/json'\n                }\n            });\n            const data = await response.json();\n            return data;\n        }\n        ```\n\n    * Handle Responses: Process the data received from the API and integrate it into your site's design or functionality.\n    </br></br>\n\n1. **Q: Is it possible to integrate AI APIs into WooCommerce?**\n    </br>**A:** We do not currently have an official integration guide for using AI APIs with WooCommerce. However, the RESTful API itself does not impose any restrictions on the platform, provided it supports standard web queries.\n\n    We strongly recommend to begin by reading the official documentation provided by WooCommerce: https://woocommerce.com/document/woocommerce-rest-api/\n\n    Integrating third-party APIs with WooCommerce enhances store functionality and streamlines operations. This can be achieved through various methods:\n\n    * Utilizing WooCommerce REST API:\n\n        WooCommerce provides a robust REST API that allows external applications to interact with your store data.\n        You can create API keys with specific permissions (Read, Write, or Read/Write) in WooCommerce > Settings > Advanced > REST API.\n        This enables you to automate tasks like inventory syncing, order processing, customer data synchronization, and more, by building custom integrations or using third-party services that leverage this API.\n\n    * Employing Plugins:\n\n        Many WordPress and WooCommerce plugins are designed specifically for integrating with popular third-party services like payment gateways, shipping carriers, CRM systems, and accounting software.\n        Plugins often offer pre-built integrations, simplifying the setup process and reducing the need for custom coding.\n        Examples include plugins for specific payment processors (e.g., Stripe, PayPal), shipping solutions (e.g., FedEx, USPS), or general API integration tools like WPGet API.\n\n    * Custom Code and Webhooks:\n\n        For unique integration needs or when a suitable plugin isn't available, you can implement custom code within your WordPress theme or a custom plugin.\n        This involves using WordPress/WooCommerce hooks and filters to trigger API calls at specific events (e.g., woocommerce_payment_complete for post-purchase actions).\n        Webhooks can also be used to send real-time data from WooCommerce to a third-party service when certain events occur (e.g., new order, product update).\n    </br></br>\n\n## Debugging Guide\n1. **Invalid TaskId Error**\n    </br>**Why:** You’ll receive an InvalidTaskId error if you attempt to check the status of a task that has timed out. Therefore, once an AI task is initiated, you’ll need to poll for its status within the polling_interval until the status changes to either success or error.\n    </br>**Solution:** To avoid the task becoming invalid, it’s necessary to implement a timed loop that queries the task status at regular intervals within the allowed polling window.\n\n1. **500 Server Error / unknown_internal_error**\n    </br>**A:** ***Important***: Simply calling the File API does not upload your file. You must manually upload the file to the URL provided in the File API response. That URL is your upload destination, make sure the file is successfully transferred there before proceeding.<br>\n    Before calling the AI API, ensure your file has been successfully uploaded. Use the File API to retrieve an upload URL, then upload your file to that location. Once the upload is complete, you'll receive a ***file_id*** in the response, this ID is what you'll use to access AI features related to that file.\n    </br></br>\n\n1. **404 Not Found error when using AI APIs**\n    </br>**A:** ***Important***: Simply calling the File API does not upload your file. You must manually upload the file to the URL provided in the File API response. That URL is your upload destination, make sure the file is successfully transferred there before proceeding.<br>\n    Before calling the AI API, ensure your file has been successfully uploaded. Use the File API to retrieve an upload URL, then upload your file to that location. Once the upload is complete, you'll receive a ***file_id*** in the response, this ID is what you'll use to access AI features related to that file.\n    </br></br>\n\n1. **The API response returns the same style ID on the Postman**\n    </br>**A:** The is because Postman (Pretty view) and Chrome use JavaScript to parse JSON responses. In JavaScript, numbers larger than 9007199254740991 (2^53-1) cannot be represented precisely. They are rounded to the nearest representable value, which makes different IDs appear identical (e.g., 219691778809271815 → 219691778809271800).</br>\n    * Precision Loss in JavaScript/JSON Error Handling\n      * Cause: JavaScript's Number type cannot safely handle integers beyond 2^53 - 1, leading to silent truncation or rounding.\n      * Solution: Use a JSON parser like ***json-bigint*** to treat IDs as strings and retain full precision.\n    </br></br>\n\n1. **Beard Authentication 400 Error**\n    </br>**A:** When using the V2 API, you must include your API key in every request by adding a Bearer authorization header. Failure to do so will result in authentication errors.\n    **Valid Request Header Format**\n    ```\n    Authorization: Bearer YOUR_API_KEY\n    ```\n    **Common Issues**\n\n    1.  **Missing Bearer Prefix**\n        The `Authorization` header must start with `Bearer` followed by the API key.\n        Example:\n        ```\n        Authorization: YOUR_API_KEY\n        ```\n\n    1.  **Unnecessary Characters**\n        Do not include angle brackets `<` or `>` around the API key. These characters are not required and will cause the request to fail.\n        Example:\n        ```\n        Authorization: Bearer <YOUR_API_KEY>\n        ```\n\n    2.  **Incorrect API Key**\n        Ensure that the API key provided in the `Authorization` header is correct and active.\n"
   },
   "servers": [
     {
@@ -233,6 +233,7 @@
     "/s2s/v1.0/client/credit": {
       "get": {
         "summary": "Get unit info",
+        "operationId": "getS2sV10ClientCredit",
         "tags": [
           "Unit system"
         ],
@@ -331,6 +332,7 @@
     "/s2s/v1.0/client/credit/history": {
       "get": {
         "summary": "View unit history",
+        "operationId": "getS2sV10ClientCreditHistory",
         "tags": [
           "Unit system"
         ],
@@ -524,6 +526,7 @@
     "/s2s/v2.0/file/enhance": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileEnhance",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Enhance"
@@ -606,6 +609,7 @@
     "/s2s/v2.0/task/enhance": {
       "post": {
         "summary": "Run an AI Photo Enhance task.",
+        "operationId": "postS2sV20TaskEnhance",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Enhance"
@@ -665,7 +669,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -716,6 +720,7 @@
     "/s2s/v2.0/task/enhance/{task_id}": {
       "get": {
         "summary": "Check an AI Photo Enhance task status.",
+        "operationId": "getS2sV20TaskEnhanceTaskId",
         "tags": [
           "AI Photo Enhance"
         ],
@@ -794,6 +799,7 @@
     "/s2s/v2.0/file/obj-removal": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileObjRemoval",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Object Removal"
@@ -876,6 +882,7 @@
     "/s2s/v2.0/task/obj-removal": {
       "post": {
         "summary": "Run an AI Object Removal task.",
+        "operationId": "postS2sV20TaskObjRemoval",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Object Removal"
@@ -917,7 +924,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -968,6 +975,7 @@
     "/s2s/v2.0/task/obj-removal/{task_id}": {
       "get": {
         "summary": "Check an AI Object Removal task status.",
+        "operationId": "getS2sV20TaskObjRemovalTaskId",
         "tags": [
           "AI Object Removal"
         ],
@@ -1046,6 +1054,7 @@
     "/s2s/v2.0/file/generative-fill": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileGenerativeFill",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Object Removal Pro"
@@ -1128,6 +1137,7 @@
     "/s2s/v2.0/task/generative-fill": {
       "post": {
         "summary": "Run an AI Object Removal Pro task.",
+        "operationId": "postS2sV20TaskGenerativeFill",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Object Removal Pro"
@@ -1169,7 +1179,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -1220,6 +1230,7 @@
     "/s2s/v2.0/task/generative-fill/{task_id}": {
       "get": {
         "summary": "Check an AI Object Removal Pro task status.",
+        "operationId": "getS2sV20TaskGenerativeFillTaskId",
         "tags": [
           "AI Object Removal Pro"
         ],
@@ -1298,6 +1309,7 @@
     "/s2s/v2.0/file/sod": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileSod",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Background Removal"
@@ -1380,6 +1392,7 @@
     "/s2s/v2.0/task/sod": {
       "post": {
         "summary": "Run an AI Photo Background Removal task.",
+        "operationId": "postS2sV20TaskSod",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Background Removal"
@@ -1421,7 +1434,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -1472,6 +1485,7 @@
     "/s2s/v2.0/task/sod/{task_id}": {
       "get": {
         "summary": "Check an AI Photo Background Removal task status.",
+        "operationId": "getS2sV20TaskSodTaskId",
         "tags": [
           "AI Photo Background Removal"
         ],
@@ -1550,6 +1564,7 @@
     "/s2s/v2.0/file/colorize": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileColorize",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Colorize"
@@ -1632,6 +1647,7 @@
     "/s2s/v2.0/task/colorize": {
       "post": {
         "summary": "Run an AI Photo Colorize task.",
+        "operationId": "postS2sV20TaskColorize",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Colorize"
@@ -1673,7 +1689,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -1724,6 +1740,7 @@
     "/s2s/v2.0/task/colorize/{task_id}": {
       "get": {
         "summary": "Check a AI Photo Colorize task status.",
+        "operationId": "getS2sV20TaskColorizeTaskId",
         "tags": [
           "AI Photo Colorize"
         ],
@@ -1802,6 +1819,7 @@
     "/s2s/v2.0/task/template/text-to-image": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateTextToImage",
         "tags": [
           "AI Image Generator"
         ],
@@ -1878,6 +1896,7 @@
     "/s2s/v2.0/task/text-to-image": {
       "post": {
         "summary": "Run an AI Image Generator task.",
+        "operationId": "postS2sV20TaskTextToImage",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Image Generator"
@@ -1968,7 +1987,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -2019,6 +2038,7 @@
     "/s2s/v2.0/task/text-to-image/{task_id}": {
       "get": {
         "summary": "Check a AI Image Generator task status.",
+        "operationId": "getS2sV20TaskTextToImageTaskId",
         "tags": [
           "AI Image Generator"
         ],
@@ -2097,6 +2117,7 @@
     "/s2s/v2.0/file/hair-style": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairStyle",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hairstyle Generator"
@@ -2179,6 +2200,7 @@
     "/s2s/v2.0/task/template/hair-style": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHairStyle",
         "tags": [
           "AI Hairstyle Generator"
         ],
@@ -2255,6 +2277,7 @@
     "/s2s/v2.0/task/hair-style": {
       "post": {
         "summary": "Run an AI Hairstyle Generator task.",
+        "operationId": "postS2sV20TaskHairStyle",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hairstyle Generator"
@@ -2296,7 +2319,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -2347,6 +2370,7 @@
     "/s2s/v2.0/task/hair-style/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Hairstyle Generator task.",
+        "operationId": "getS2sV20TaskHairStyleTaskId",
         "tags": [
           "AI Hairstyle Generator"
         ],
@@ -2425,6 +2449,7 @@
     "/s2s/v2.0/file/hair-ext": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairExt",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Extension"
@@ -2507,6 +2532,7 @@
     "/s2s/v2.0/task/template/hair-ext": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHairExt",
         "tags": [
           "AI Hair Extension"
         ],
@@ -2583,6 +2609,7 @@
     "/s2s/v2.0/task/hair-ext": {
       "post": {
         "summary": "Run an AI Hair Extension task.",
+        "operationId": "postS2sV20TaskHairExt",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Extension"
@@ -2624,7 +2651,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -2675,6 +2702,7 @@
     "/s2s/v2.0/task/hair-ext/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Hair Extension task.",
+        "operationId": "getS2sV20TaskHairExtTaskId",
         "tags": [
           "AI Hair Extension"
         ],
@@ -2753,6 +2781,7 @@
     "/s2s/v2.0/file/hair-bang": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairBang",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Bang Generator"
@@ -2835,6 +2864,7 @@
     "/s2s/v2.0/task/template/hair-bang": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHairBang",
         "tags": [
           "AI Hair Bang Generator"
         ],
@@ -2911,6 +2941,7 @@
     "/s2s/v2.0/task/hair-bang": {
       "post": {
         "summary": "Run an AI Hair Bang Generator task.",
+        "operationId": "postS2sV20TaskHairBang",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Bang Generator"
@@ -2952,7 +2983,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -3003,6 +3034,7 @@
     "/s2s/v2.0/task/hair-bang/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Hair Bang Generator task.",
+        "operationId": "getS2sV20TaskHairBangTaskId",
         "tags": [
           "AI Hair Bang Generator"
         ],
@@ -3081,6 +3113,7 @@
     "/s2s/v2.0/file/hair-vol": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairVol",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Volume Generator"
@@ -3163,6 +3196,7 @@
     "/s2s/v2.0/task/template/hair-vol": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHairVol",
         "tags": [
           "AI Hair Volume Generator"
         ],
@@ -3239,6 +3273,7 @@
     "/s2s/v2.0/task/hair-vol": {
       "post": {
         "summary": "Run an AI Hair Volume Generator task.",
+        "operationId": "postS2sV20TaskHairVol",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Volume Generator"
@@ -3280,7 +3315,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -3331,6 +3366,7 @@
     "/s2s/v2.0/task/hair-vol/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Hair Volume Generator task.",
+        "operationId": "getS2sV20TaskHairVolTaskId",
         "tags": [
           "AI Hair Volume Generator"
         ],
@@ -3409,6 +3445,7 @@
     "/s2s/v2.0/file/hair-curl": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairCurl",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Wavy Hair"
@@ -3491,6 +3528,7 @@
     "/s2s/v2.0/task/template/hair-curl": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHairCurl",
         "tags": [
           "AI Wavy Hair"
         ],
@@ -3567,6 +3605,7 @@
     "/s2s/v2.0/task/hair-curl": {
       "post": {
         "summary": "Run an AI Wavy Hair task.",
+        "operationId": "postS2sV20TaskHairCurl",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Wavy Hair"
@@ -3608,7 +3647,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -3659,6 +3698,7 @@
     "/s2s/v2.0/task/hair-curl/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Wavy Hair task.",
+        "operationId": "getS2sV20TaskHairCurlTaskId",
         "tags": [
           "AI Wavy Hair"
         ],
@@ -3737,6 +3777,7 @@
     "/s2s/v2.0/file/out-paint": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileOutPaint",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Image Extender"
@@ -3819,6 +3860,7 @@
     "/s2s/v2.0/task/out-paint": {
       "post": {
         "summary": "Run an AI Image Extender task.",
+        "operationId": "postS2sV20TaskOutPaint",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Image Extender"
@@ -3948,7 +3990,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -3999,6 +4041,7 @@
     "/s2s/v2.0/task/out-paint/{task_id}": {
       "get": {
         "summary": "Check an AI Image Extender task status.",
+        "operationId": "getS2sV20TaskOutPaintTaskId",
         "tags": [
           "AI Image Extender"
         ],
@@ -4077,6 +4120,7 @@
     "/s2s/v2.0/file/lighting": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileLighting",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Lighting"
@@ -4159,6 +4203,7 @@
     "/s2s/v2.0/task/lighting": {
       "post": {
         "summary": "Run an AI Photo Lighting task.",
+        "operationId": "postS2sV20TaskLighting",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Lighting"
@@ -4200,7 +4245,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -4251,6 +4296,7 @@
     "/s2s/v2.0/task/lighting/{task_id}": {
       "get": {
         "summary": "Check an AI Photo Lighting task status.",
+        "operationId": "getS2sV20TaskLightingTaskId",
         "tags": [
           "AI Photo Lighting"
         ],
@@ -4329,6 +4375,7 @@
     "/s2s/v2.0/file/obj-replace": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileObjReplace",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Replace"
@@ -4411,6 +4458,7 @@
     "/s2s/v2.0/task/obj-replace": {
       "post": {
         "summary": "Run an AI Replace task.",
+        "operationId": "postS2sV20TaskObjReplace",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Replace"
@@ -4465,7 +4513,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -4516,6 +4564,7 @@
     "/s2s/v2.0/task/obj-replace/{task_id}": {
       "get": {
         "summary": "Check an AI Replace task status.",
+        "operationId": "getS2sV20TaskObjReplaceTaskId",
         "tags": [
           "AI Replace"
         ],
@@ -4594,6 +4643,7 @@
     "/s2s/v2.0/file/sod/change-background": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileSodChangeBackground",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Background Change"
@@ -4676,6 +4726,7 @@
     "/s2s/v2.0/task/sod/change-background": {
       "post": {
         "summary": "Run an AI photo Background Change task.",
+        "operationId": "postS2sV20TaskSodChangeBackground",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Background Change"
@@ -4717,7 +4768,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -4768,6 +4819,7 @@
     "/s2s/v2.0/task/sod/change-background/{task_id}": {
       "get": {
         "summary": "Check  AI photo Background Change task status.",
+        "operationId": "getS2sV20TaskSodChangeBackgroundTaskId",
         "tags": [
           "AI Photo Background Change"
         ],
@@ -4846,6 +4898,7 @@
     "/s2s/v2.0/file/sod/blur-background": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileSodBlurBackground",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Background Blur"
@@ -4928,6 +4981,7 @@
     "/s2s/v2.0/task/sod/blur-background": {
       "post": {
         "summary": "Run an AI photo Background Blur task.",
+        "operationId": "postS2sV20TaskSodBlurBackground",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Background Blur"
@@ -4969,7 +5023,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -5020,6 +5074,7 @@
     "/s2s/v2.0/task/sod/blur-background/{task_id}": {
       "get": {
         "summary": "Check  AI photo Background Blur task status.",
+        "operationId": "getS2sV20TaskSodBlurBackgroundTaskId",
         "tags": [
           "AI Photo Background Blur"
         ],
@@ -5098,6 +5153,7 @@
     "/s2s/v2.0/file/colorize/color-correct": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileColorizeColorCorrect",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Photo Color Correction"
@@ -5180,6 +5236,7 @@
     "/s2s/v2.0/task/colorize/color-correct": {
       "post": {
         "summary": "Run an AI Photo Color Correction task.",
+        "operationId": "postS2sV20TaskColorizeColorCorrect",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Photo Color Correction"
@@ -5221,7 +5278,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -5272,6 +5329,7 @@
     "/s2s/v2.0/task/colorize/color-correct/{task_id}": {
       "get": {
         "summary": "Check a AI Photo Color Correction task status.",
+        "operationId": "getS2sV20TaskColorizeColorCorrectTaskId",
         "tags": [
           "AI Photo Color Correction"
         ],
@@ -5350,6 +5408,7 @@
     "/s2s/v2.0/file/face-swap": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileFaceSwap",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Face Swap"
@@ -5432,6 +5491,7 @@
     "/s2s/v2.0/task/face-swap/pre-process": {
       "post": {
         "summary": "Run an AI Face Swap face detection task.",
+        "operationId": "postS2sV20TaskFaceSwapPreProcess",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Face Swap"
@@ -5473,7 +5533,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -5524,6 +5584,7 @@
     "/s2s/v2.0/task/face-swap/pre-process/{task_id}": {
       "get": {
         "summary": "Check a AI Face Swap face detection task status.",
+        "operationId": "getS2sV20TaskFaceSwapPreProcessTaskId",
         "tags": [
           "AI Face Swap"
         ],
@@ -5587,7 +5648,7 @@
                                 "url": {
                                   "type": "string",
                                   "description": "URL to download this result. Valid for 2 hours",
-                                  "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                                  "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                                 },
                                 "faces": {
                                   "type": "array",
@@ -5668,6 +5729,7 @@
     "/s2s/v2.0/task/face-swap": {
       "post": {
         "summary": "Run an AI Face Swap task.",
+        "operationId": "postS2sV20TaskFaceSwap",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Face Swap"
@@ -5734,7 +5796,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -5785,6 +5847,7 @@
     "/s2s/v2.0/task/face-swap/{task_id}": {
       "get": {
         "summary": "Check a AI Face Swap task status.",
+        "operationId": "getS2sV20TaskFaceSwapTaskId",
         "tags": [
           "AI Face Swap"
         ],
@@ -5863,6 +5926,7 @@
     "/s2s/v2.0/file/video-sr": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileVideoSr",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Video Enhance"
@@ -5945,6 +6009,7 @@
     "/s2s/v2.0/task/video-sr": {
       "post": {
         "summary": "Run an AI Video Enhance task.",
+        "operationId": "postS2sV20TaskVideoSr",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Video Enhance"
@@ -5998,7 +6063,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -6049,6 +6114,7 @@
     "/s2s/v2.0/task/video-sr/{task_id}": {
       "get": {
         "summary": "Check a AI Video Enhance task status.",
+        "operationId": "getS2sV20TaskVideoSrTaskId",
         "tags": [
           "AI Video Enhance"
         ],
@@ -6127,6 +6193,7 @@
     "/s2s/v2.0/file/mu-transfer": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileMuTransfer",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Makeup Transfer"
@@ -6209,6 +6276,7 @@
     "/s2s/v2.0/task/mu-transfer": {
       "post": {
         "summary": "Run an AI Makeup Transfer task.",
+        "operationId": "postS2sV20TaskMuTransfer",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Makeup Transfer"
@@ -6250,7 +6318,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -6301,6 +6369,7 @@
     "/s2s/v2.0/task/mu-transfer/{task_id}": {
       "get": {
         "summary": "Check a AI Makeup Transfer task status.",
+        "operationId": "getS2sV20TaskMuTransferTaskId",
         "tags": [
           "AI Makeup Transfer"
         ],
@@ -6379,6 +6448,7 @@
     "/s2s/v2.0/file/headshot": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHeadshot",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Headshot Generator"
@@ -6461,6 +6531,7 @@
     "/s2s/v2.0/task/template/headshot": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateHeadshot",
         "tags": [
           "AI Headshot Generator"
         ],
@@ -6537,6 +6608,7 @@
     "/s2s/v2.0/task/headshot": {
       "post": {
         "summary": "Run an AI Headshot Generator task.",
+        "operationId": "postS2sV20TaskHeadshot",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Headshot Generator"
@@ -6581,7 +6653,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -6632,6 +6704,7 @@
     "/s2s/v2.0/task/headshot/{task_id}": {
       "get": {
         "summary": "Check the status of the AI Headshot Generator task.",
+        "operationId": "getS2sV20TaskHeadshotTaskId",
         "tags": [
           "AI Headshot Generator"
         ],
@@ -6710,6 +6783,7 @@
     "/s2s/v2.0/file/ai-studio": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileAiStudio",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Studio Generator"
@@ -6792,6 +6866,7 @@
     "/s2s/v2.0/task/template/ai-studio": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateAiStudio",
         "tags": [
           "AI Studio Generator"
         ],
@@ -6868,6 +6943,7 @@
     "/s2s/v2.0/task/ai-studio": {
       "post": {
         "summary": "Run an AI Studio task.",
+        "operationId": "postS2sV20TaskAiStudio",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Studio Generator"
@@ -6912,7 +6988,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -6963,6 +7039,7 @@
     "/s2s/v2.0/task/ai-studio/{task_id}": {
       "get": {
         "summary": "Check the status of the AI Studio task.",
+        "operationId": "getS2sV20TaskAiStudioTaskId",
         "tags": [
           "AI Studio Generator"
         ],
@@ -7041,6 +7118,7 @@
     "/s2s/v2.0/file/ai-avatar": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileAiAvatar",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Avatar Generator"
@@ -7123,6 +7201,7 @@
     "/s2s/v2.0/task/template/ai-avatar": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateAiAvatar",
         "tags": [
           "AI Avatar Generator"
         ],
@@ -7199,6 +7278,7 @@
     "/s2s/v2.0/task/ai-avatar": {
       "post": {
         "summary": "Run an AI Avatar task.",
+        "operationId": "postS2sV20TaskAiAvatar",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Avatar Generator"
@@ -7243,7 +7323,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -7294,6 +7374,7 @@
     "/s2s/v2.0/task/ai-avatar/{task_id}": {
       "get": {
         "summary": "Check the status of the AI Avatar task.",
+        "operationId": "getS2sV20TaskAiAvatarTaskId",
         "tags": [
           "AI Avatar Generator"
         ],
@@ -7372,6 +7453,7 @@
     "/s2s/v2.0/file/video-trans": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileVideoTrans",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Style Transfer (video)"
@@ -7454,6 +7536,7 @@
     "/s2s/v2.0/task/template/video-trans": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateVideoTrans",
         "tags": [
           "AI Style Transfer (video)"
         ],
@@ -7530,6 +7613,7 @@
     "/s2s/v2.0/task/video-trans": {
       "post": {
         "summary": "Run an AI Style Transfer (video) task.",
+        "operationId": "postS2sV20TaskVideoTrans",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Style Transfer (video)"
@@ -7571,7 +7655,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -7622,6 +7706,7 @@
     "/s2s/v2.0/task/video-trans/{task_id}": {
       "get": {
         "summary": "Check the status of the AI Style Transfer (video) task.",
+        "operationId": "getS2sV20TaskVideoTransTaskId",
         "tags": [
           "AI Style Transfer (video)"
         ],
@@ -7700,6 +7785,7 @@
     "/s2s/v2.0/file/face-swap-vid": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileFaceSwapVid",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Face Swap (video)"
@@ -7782,6 +7868,7 @@
     "/s2s/v2.0/task/face-swap-vid": {
       "post": {
         "summary": "Run an AI Face Swap (video) task.",
+        "operationId": "postS2sV20TaskFaceSwapVid",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Face Swap (video)"
@@ -7900,7 +7987,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -7951,6 +8038,7 @@
     "/s2s/v2.0/task/face-swap-vid/{task_id}": {
       "get": {
         "summary": "Check the status of the AI Face Swap (video) task.",
+        "operationId": "getS2sV20TaskFaceSwapVidTaskId",
         "tags": [
           "AI Face Swap (video)"
         ],
@@ -8029,6 +8117,7 @@
     "/s2s/v2.0/file/skin-analysis": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileSkinAnalysis",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Skin Analysis"
@@ -8111,6 +8200,7 @@
     "/s2s/v2.0/task/skin-analysis": {
       "post": {
         "summary": "Run a Skin Analysis task.",
+        "operationId": "postS2sV20TaskSkinAnalysis",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Skin Analysis"
@@ -8152,7 +8242,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -8203,6 +8293,7 @@
     "/s2s/v2.0/task/skin-analysis/{task_id}": {
       "get": {
         "summary": "Check a Skin Analysis task status.",
+        "operationId": "getS2sV20TaskSkinAnalysisTaskId",
         "tags": [
           "AI Skin Analysis"
         ],
@@ -8244,7 +8335,7 @@
                       "data": {
                         "task_status": "success",
                         "results": {
-                          "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/skinanalysis_result.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                          "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/skinanalysis_result.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                         }
                       }
                     }
@@ -8405,6 +8496,7 @@
     "/s2s/v2.0/file/image-to-video": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileImageToVideo",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Image to Video Generator"
@@ -8487,6 +8579,7 @@
     "/s2s/v2.0/task/template/image-to-video": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateImageToVideo",
         "tags": [
           "AI Image to Video Generator"
         ],
@@ -8563,6 +8656,7 @@
     "/s2s/v2.0/task/image-to-video": {
       "post": {
         "summary": "Run an Image to Video task.",
+        "operationId": "postS2sV20TaskImageToVideo",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Image to Video Generator"
@@ -8628,7 +8722,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -8679,6 +8773,7 @@
     "/s2s/v2.0/task/image-to-video/{task_id}": {
       "get": {
         "summary": "Check the status of the Image to Video task.",
+        "operationId": "getS2sV20TaskImageToVideoTaskId",
         "tags": [
           "AI Image to Video Generator"
         ],
@@ -8757,6 +8852,7 @@
     "/s2s/v2.0/file/cloth": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileCloth",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Clothes"
@@ -8839,6 +8935,7 @@
     "/s2s/v2.0/task/template/cloth": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateCloth",
         "tags": [
           "AI Clothes"
         ],
@@ -8915,6 +9012,7 @@
     "/s2s/v2.0/task/cloth": {
       "post": {
         "summary": "Run an AI Cloths task.",
+        "operationId": "postS2sV20TaskCloth",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Clothes"
@@ -8956,7 +9054,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -9007,6 +9105,7 @@
     "/s2s/v2.0/task/cloth/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Cloths task.",
+        "operationId": "getS2sV20TaskClothTaskId",
         "tags": [
           "AI Clothes"
         ],
@@ -9085,6 +9184,7 @@
     "/s2s/v2.0/file/fabric": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileFabric",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Fabric"
@@ -9167,6 +9267,7 @@
     "/s2s/v2.0/task/template/fabric": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateFabric",
         "tags": [
           "AI Fabric"
         ],
@@ -9243,6 +9344,7 @@
     "/s2s/v2.0/task/fabric": {
       "post": {
         "summary": "Run an Fabric task.",
+        "operationId": "postS2sV20TaskFabric",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Fabric"
@@ -9284,7 +9386,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -9335,6 +9437,7 @@
     "/s2s/v2.0/task/fabric/{task_id}": {
       "get": {
         "summary": "Check the status of the Fabric task.",
+        "operationId": "getS2sV20TaskFabricTaskId",
         "tags": [
           "AI Fabric"
         ],
@@ -9413,6 +9516,7 @@
     "/s2s/v2.0/file/hair-color": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairColor",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Color"
@@ -9495,6 +9599,7 @@
     "/s2s/v2.0/task/hair-color": {
       "post": {
         "summary": "Run a Hair Color task.",
+        "operationId": "postS2sV20TaskHairColor",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Color"
@@ -9536,7 +9641,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -9587,6 +9692,7 @@
     "/s2s/v2.0/task/hair-color/{task_id}": {
       "get": {
         "summary": "Check a Hair Color task status.",
+        "operationId": "getS2sV20TaskHairColorTaskId",
         "tags": [
           "AI Hair Color"
         ],
@@ -9665,6 +9771,7 @@
     "/s2s/v2.0/file/face-attr-analysis": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileFaceAttrAnalysis",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Face Analyzer"
@@ -9747,6 +9854,7 @@
     "/s2s/v2.0/task/face-attr-analysis": {
       "post": {
         "summary": "Run an Face Attribute Analysis task.",
+        "operationId": "postS2sV20TaskFaceAttrAnalysis",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Face Analyzer"
@@ -9802,7 +9910,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -9853,6 +9961,7 @@
     "/s2s/v2.0/task/face-attr-analysis/{task_id}": {
       "get": {
         "summary": "Check an Face Attribute Analysis task status.",
+        "operationId": "getS2sV20TaskFaceAttrAnalysisTaskId",
         "tags": [
           "AI Face Analyzer"
         ],
@@ -10296,6 +10405,7 @@
     "/s2s/v2.0/file/skin-tone-analysis": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileSkinToneAnalysis",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Skin Tone Analysis"
@@ -10378,6 +10488,7 @@
     "/s2s/v2.0/task/skin-tone-analysis": {
       "post": {
         "summary": "Run an Skin Tone Analysis task.",
+        "operationId": "postS2sV20TaskSkinToneAnalysis",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Skin Tone Analysis"
@@ -10427,7 +10538,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -10478,6 +10589,7 @@
     "/s2s/v2.0/task/skin-tone-analysis/{task_id}": {
       "get": {
         "summary": "Check an Skin Tone Analysis task status.",
+        "operationId": "getS2sV20TaskSkinToneAnalysisTaskId",
         "tags": [
           "AI Skin Tone Analysis"
         ],
@@ -10599,6 +10711,7 @@
     "/s2s/v2.0/file/hair-length-detection": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairLengthDetection",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Length Detection"
@@ -10681,6 +10794,7 @@
     "/s2s/v2.0/task/hair-length-detection": {
       "post": {
         "summary": "Run an Hair Length Detection task.",
+        "operationId": "postS2sV20TaskHairLengthDetection",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Length Detection"
@@ -10726,7 +10840,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -10777,6 +10891,7 @@
     "/s2s/v2.0/task/hair-length-detection/{task_id}": {
       "get": {
         "summary": "Check an Hair Length Detection task status.",
+        "operationId": "getS2sV20TaskHairLengthDetectionTaskId",
         "tags": [
           "AI Hair Length Detection"
         ],
@@ -10895,6 +11010,7 @@
     "/s2s/v2.0/file/hair-type-detection": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairTypeDetection",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Type Detection"
@@ -10977,6 +11093,7 @@
     "/s2s/v2.0/task/hair-type-detection": {
       "post": {
         "summary": "Run an Hair Type Detection task.",
+        "operationId": "postS2sV20TaskHairTypeDetection",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Type Detection"
@@ -10993,7 +11110,6 @@
               "schema": {
                 "allOf": [
                   {
-                    "type": "object",
                     "$ref": "#/components/schemas/BasicFaceAttrReqFaceThreeAngle"
                   }
                 ]
@@ -11019,7 +11135,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -11070,6 +11186,7 @@
     "/s2s/v2.0/task/hair-type-detection/{task_id}": {
       "get": {
         "summary": "Check an Hair Type Detection task status.",
+        "operationId": "getS2sV20TaskHairTypeDetectionTaskId",
         "tags": [
           "AI Hair Type Detection"
         ],
@@ -11188,6 +11305,7 @@
     "/s2s/v2.0/file/hair-frizziness-detection": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHairFrizzinessDetection",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hair Frizziness Detection"
@@ -11270,6 +11388,7 @@
     "/s2s/v2.0/task/hair-frizziness-detection": {
       "post": {
         "summary": "Run an Hair Frizziness Detection task.",
+        "operationId": "postS2sV20TaskHairFrizzinessDetection",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hair Frizziness Detection"
@@ -11286,7 +11405,6 @@
               "schema": {
                 "allOf": [
                   {
-                    "type": "object",
                     "$ref": "#/components/schemas/BasicFaceAttrReqFaceThreeAngle"
                   }
                 ]
@@ -11312,7 +11430,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -11363,6 +11481,7 @@
     "/s2s/v2.0/task/hair-frizziness-detection/{task_id}": {
       "get": {
         "summary": "Check an Hair Frizziness Detection task status.",
+        "operationId": "getS2sV20TaskHairFrizzinessDetectionTaskId",
         "tags": [
           "AI Hair Frizziness Detection"
         ],
@@ -11481,6 +11600,7 @@
     "/s2s/v2.0/file/beard-style": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileBeardStyle",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Beard Style Generator"
@@ -11563,6 +11683,7 @@
     "/s2s/v2.0/task/template/beard-style": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateBeardStyle",
         "tags": [
           "AI Beard Style Generator"
         ],
@@ -11639,6 +11760,7 @@
     "/s2s/v2.0/task/beard-style": {
       "post": {
         "summary": "Run an AI Beard Style Generator task.",
+        "operationId": "postS2sV20TaskBeardStyle",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Beard Style Generator"
@@ -11680,7 +11802,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -11731,6 +11853,7 @@
     "/s2s/v2.0/task/beard-style/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Beard Style Generator task.",
+        "operationId": "getS2sV20TaskBeardStyleTaskId",
         "tags": [
           "AI Beard Style Generator"
         ],
@@ -11809,6 +11932,7 @@
     "/s2s/v2.0/file/aging": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileAging",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Aging Generator"
@@ -11891,6 +12015,7 @@
     "/s2s/v2.0/task/aging": {
       "post": {
         "summary": "Run a AI Aging Generator task.",
+        "operationId": "postS2sV20TaskAging",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Aging Generator"
@@ -11932,7 +12057,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -11983,6 +12108,7 @@
     "/s2s/v2.0/task/aging/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Aging Generator task.",
+        "operationId": "getS2sV20TaskAgingTaskId",
         "tags": [
           "AI Aging Generator"
         ],
@@ -12061,6 +12187,7 @@
     "/s2s/v2.0/file/look-vto": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileLookVto",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Look Vto"
@@ -12143,6 +12270,7 @@
     "/s2s/v2.0/task/template/look-vto": {
       "get": {
         "summary": "List predefined templates.",
+        "operationId": "getS2sV20TaskTemplateLookVto",
         "tags": [
           "AI Look Vto"
         ],
@@ -12219,6 +12347,7 @@
     "/s2s/v2.0/task/look-vto": {
       "post": {
         "summary": "Run an AI Look Virtual Try On task.",
+        "operationId": "postS2sV20TaskLookVto",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Look Vto"
@@ -12260,7 +12389,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -12311,6 +12440,7 @@
     "/s2s/v2.0/task/look-vto/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Look Virtual Try On task.",
+        "operationId": "getS2sV20TaskLookVtoTaskId",
         "tags": [
           "AI Look Vto"
         ],
@@ -12389,6 +12519,7 @@
     "/s2s/v2.0/file/makeup-vto": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileMakeupVto",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Makeup Vto"
@@ -12471,6 +12602,7 @@
     "/s2s/v2.0/task/makeup-vto": {
       "post": {
         "summary": "Run an AI Makeup Virtual Try On task.",
+        "operationId": "postS2sV20TaskMakeupVto",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Makeup Vto"
@@ -12620,7 +12752,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -12671,6 +12803,7 @@
     "/s2s/v2.0/task/makeup-vto/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Makeup Virtual Try On task.",
+        "operationId": "getS2sV20TaskMakeupVtoTaskId",
         "tags": [
           "AI Makeup Vto"
         ],
@@ -12749,6 +12882,7 @@
     "/s2s/v2.0/file/2d-vto/earring": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20File2dVtoEarring",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Earring Virtual Try On"
@@ -12831,6 +12965,7 @@
     "/s2s/v2.0/task/2d-vto/earring": {
       "post": {
         "summary": "Run an AI 2D Virtual Try On Earring task.",
+        "operationId": "postS2sV20Task2dVtoEarring",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Earring Virtual Try On"
@@ -12868,7 +13003,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -12919,6 +13054,7 @@
     "/s2s/v2.0/task/2d-vto/earring/{task_id}": {
       "get": {
         "summary": "Check the status of a AI 2D Virtual Try On Earring task.",
+        "operationId": "getS2sV20Task2dVtoEarringTaskId",
         "tags": [
           "AI Earring Virtual Try On"
         ],
@@ -12997,6 +13133,7 @@
     "/s2s/v2.0/file/2d-vto/necklace": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20File2dVtoNecklace",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Necklace Virtual Try On"
@@ -13079,6 +13216,7 @@
     "/s2s/v2.0/task/2d-vto/necklace": {
       "post": {
         "summary": "Run an AI 2D Virtual Try On Necklace task.",
+        "operationId": "postS2sV20Task2dVtoNecklace",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Necklace Virtual Try On"
@@ -13116,7 +13254,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -13167,6 +13305,7 @@
     "/s2s/v2.0/task/2d-vto/necklace/{task_id}": {
       "get": {
         "summary": "Check the status of a AI 2D Virtual Try On Necklace task.",
+        "operationId": "getS2sV20Task2dVtoNecklaceTaskId",
         "tags": [
           "AI Necklace Virtual Try On"
         ],
@@ -13245,6 +13384,7 @@
     "/s2s/v2.0/file/2d-vto/ring": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20File2dVtoRing",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Ring Virtual Try On"
@@ -13327,6 +13467,7 @@
     "/s2s/v2.0/task/2d-vto/ring": {
       "post": {
         "summary": "Run an AI 2D Virtual Try On Ring task.",
+        "operationId": "postS2sV20Task2dVtoRing",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Ring Virtual Try On"
@@ -13364,7 +13505,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -13415,6 +13556,7 @@
     "/s2s/v2.0/task/2d-vto/ring/{task_id}": {
       "get": {
         "summary": "Check the status of a AI 2D Virtual Try On Ring task.",
+        "operationId": "getS2sV20Task2dVtoRingTaskId",
         "tags": [
           "AI Ring Virtual Try On"
         ],
@@ -13493,6 +13635,7 @@
     "/s2s/v2.0/file/2d-vto/bracelet": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20File2dVtoBracelet",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Bracelet Virtual Try On"
@@ -13575,6 +13718,7 @@
     "/s2s/v2.0/task/2d-vto/bracelet": {
       "post": {
         "summary": "Run an AI 2D Virtual Try On Bracelet task.",
+        "operationId": "postS2sV20Task2dVtoBracelet",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Bracelet Virtual Try On"
@@ -13612,7 +13756,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -13663,6 +13807,7 @@
     "/s2s/v2.0/task/2d-vto/bracelet/{task_id}": {
       "get": {
         "summary": "Check the status of a AI 2D Virtual Try On Bracelet task.",
+        "operationId": "getS2sV20Task2dVtoBraceletTaskId",
         "tags": [
           "AI Bracelet Virtual Try On"
         ],
@@ -13741,6 +13886,7 @@
     "/s2s/v2.0/file/2d-vto/watch": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20File2dVtoWatch",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Watch Virtual Try On"
@@ -13823,6 +13969,7 @@
     "/s2s/v2.0/task/2d-vto/watch": {
       "post": {
         "summary": "Run an AI 2D Virtual Try On Watch task.",
+        "operationId": "postS2sV20Task2dVtoWatch",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Watch Virtual Try On"
@@ -13860,7 +14007,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -13911,6 +14058,7 @@
     "/s2s/v2.0/task/2d-vto/watch/{task_id}": {
       "get": {
         "summary": "Check the status of a AI 2D Virtual Try On Watch task.",
+        "operationId": "getS2sV20Task2dVtoWatchTaskId",
         "tags": [
           "AI Watch Virtual Try On"
         ],
@@ -13989,6 +14137,7 @@
     "/s2s/v2.0/file/bag": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileBag",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Bag"
@@ -14071,6 +14220,7 @@
     "/s2s/v2.0/task/bag": {
       "post": {
         "summary": "Run an AI Bag task.",
+        "operationId": "postS2sV20TaskBag",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Bag"
@@ -14130,7 +14280,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -14181,6 +14331,7 @@
     "/s2s/v2.0/task/bag/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Bag task.",
+        "operationId": "getS2sV20TaskBagTaskId",
         "tags": [
           "AI Bag"
         ],
@@ -14259,6 +14410,7 @@
     "/s2s/v2.0/file/scarf": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileScarf",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Scarf"
@@ -14341,6 +14493,7 @@
     "/s2s/v2.0/task/scarf": {
       "post": {
         "summary": "Run an AI Scarf task.",
+        "operationId": "postS2sV20TaskScarf",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Scarf"
@@ -14401,7 +14554,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -14452,6 +14605,7 @@
     "/s2s/v2.0/task/scarf/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Scarf task.",
+        "operationId": "getS2sV20TaskScarfTaskId",
         "tags": [
           "AI Scarf"
         ],
@@ -14530,6 +14684,7 @@
     "/s2s/v2.0/file/shoes": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileShoes",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Shoes"
@@ -14612,6 +14767,7 @@
     "/s2s/v2.0/task/shoes": {
       "post": {
         "summary": "Run an AI Shoes task.",
+        "operationId": "postS2sV20TaskShoes",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Shoes"
@@ -14672,7 +14828,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -14723,6 +14879,7 @@
     "/s2s/v2.0/task/shoes/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Shoes task.",
+        "operationId": "getS2sV20TaskShoesTaskId",
         "tags": [
           "AI Shoes"
         ],
@@ -14801,6 +14958,7 @@
     "/s2s/v2.0/file/hat": {
       "post": {
         "summary": "Create a new file.",
+        "operationId": "postS2sV20FileHat",
         "description": "To upload a new file, you'll first need to use the File API. It will give you a URL – use that URL to upload your file. Once the upload is finished, you can use the file_id from the same response to start using our AI features.",
         "tags": [
           "AI Hat"
@@ -14883,6 +15041,7 @@
     "/s2s/v2.0/task/hat": {
       "post": {
         "summary": "Run an AI Hat task.",
+        "operationId": "postS2sV20TaskHat",
         "description": "Once you start an AI task, you need to keep polling at given polling_interval to check its status until it shows either success or error because if you don't, the task will time out and when you try to check the status later, you'll get an InvalidTaskId error even if the task did finish successfully and your units will still be consumed.",
         "tags": [
           "AI Hat"
@@ -14943,7 +15102,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/components/responses/RunError"
+                      "$ref": "#/components/schemas/RunError"
                     }
                   ]
                 }
@@ -14994,6 +15153,7 @@
     "/s2s/v2.0/task/hat/{task_id}": {
       "get": {
         "summary": "Check the status of a AI Hat task.",
+        "operationId": "getS2sV20TaskHatTaskId",
         "tags": [
           "AI Hat"
         ],
@@ -15442,7 +15602,7 @@
                           "url": {
                             "type": "string",
                             "description": "URL to download this result. Valid for 2 hours",
-                            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                           }
                         }
                       }
@@ -15455,7 +15615,7 @@
         }
       },
       "SkinAnalysisResponseV2": {
-        "oneOf": [
+        "anyOf": [
           {
             "$ref": "#/components/schemas/SkinAnalysisResponseV2Zip"
           },
@@ -15497,7 +15657,7 @@
                   "url": {
                     "type": "string",
                     "description": "URL to download this result. Valid for 2 hours. The returned ZIP file contains a skinanalysisResult folder of a score_info.json file with all detection result scores and images of all detection results. Only available when format is `zip`.",
-                    "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                    "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                   }
                 }
               }
@@ -15983,7 +16143,7 @@
                           "url": {
                             "type": "string",
                             "description": "URL to download this result. Valid for 2 hours",
-                            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                           }
                         }
                       }
@@ -16069,7 +16229,7 @@
           "url": {
             "type": "string",
             "description": "URL to download this result. Valid for 2 hours",
-            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
           }
         }
       },
@@ -16079,7 +16239,7 @@
           "url": {
             "type": "string",
             "description": "URL to download this result. Valid for 2 hours",
-            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+            "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
           }
         }
       },
@@ -16128,7 +16288,7 @@
                 "url": {
                   "type": "string",
                   "description": "URL to download this result. Valid for 2 hours",
-                  "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                  "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                 }
               }
             }
@@ -16177,16 +16337,16 @@
             "results": {
               "output": [
                 {
-                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                 },
                 {
-                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/21677233-2d49-4a13-bfb4-3f408d137ab9.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250210T044313Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20250210%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=7cbeddc007d8dd2c2befa13393f5f041ee6a04710ce589abba48ff03f3bc0dfa"
+                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/21677233-2d49-4a13-bfb4-3f408d137ab9.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250210T044313Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20250210%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=7cbeddc007d8dd2c2befa13393f5f041ee6a04710ce589abba48ff03f3bc0dfa"
                 },
                 {
-                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/92a41188-cd4b-45c7-bf97-731d4964b550.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250210T054255Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20250210%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=0c78286d01dd769ccbf5b351cdbe24cba8c542c5d626d418fad75b85933a5ad6"
+                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/92a41188-cd4b-45c7-bf97-731d4964b550.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250210T054255Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20250210%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=0c78286d01dd769ccbf5b351cdbe24cba8c542c5d626d418fad75b85933a5ad6"
                 },
                 {
-                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/dd4c3d0a-2349-4630-bca8-f25a421c6ac6.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250211T021240Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20250211%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=9c56acf769f7e9c1d61a5fdbef798051897a8ad7c3860f7625599396243d55c4"
+                  "url": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/dd4c3d0a-2349-4630-bca8-f25a421c6ac6.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250211T021240Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20250211%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=9c56acf769f7e9c1d61a5fdbef798051897a8ad7c3860f7625599396243d55c4"
                 }
               ]
             }
@@ -16371,7 +16531,7 @@
       },
       "RunSodTask": {
         "title": "RunSodTask",
-        "summary": "Run Semantic Object Detection (SOD) Task",
+        "x-summary": "Run Semantic Object Detection (SOD) Task",
         "description": "This schema represents the object used to initiate a Semantic Object Detection (SOD) task.\n",
         "type": "object",
         "properties": {
@@ -17758,8 +17918,7 @@
         },
         "required": [
           "request_id",
-          "payload",
-          null
+          "payload"
         ]
       },
       "RunSkincareTaskV2": {
@@ -19062,8 +19221,6 @@
                         "earring_anchor_point": {
                           "type": "array",
                           "description": "The anchor point of the earring image, used for alignment. <br>Type: list of 2 integers <br>Range: [x, y] (pixel coordinates) <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19073,8 +19230,6 @@
                         "earring_wearing_location": {
                           "type": "array",
                           "description": "The target location of photo where the earring should be placed. <br>Type: list of 2 integers <br>Range: [x, y] (pixel coordinates) <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19084,10 +19239,8 @@
                         "earring_scale": {
                           "type": "number",
                           "description": "Controls the earring’s size in centimeters. <br>Default: null (use engine default)",
-                          "default": null,
                           "minimum": 0,
-                          "exclusiveMinimum": true,
-                          "example": null
+                          "exclusiveMinimum": true
                         },
                         "earring_is_right_ear": {
                           "type": "boolean",
@@ -19236,8 +19389,6 @@
                         "necklace_anchor_point": {
                           "type": "array",
                           "description": "The anchor points of the necklace image, used for alignment. <br>Type: 2x2 list of integers <br>Range: [[x, y], [x, y]] (pixel coordinates) <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19252,8 +19403,6 @@
                         "necklace_wearing_location": {
                           "type": "array",
                           "description": "The target locations of photo where the necklace should be placed. <br>Type: 2x2 list of integers <br>Range: [[x, y], [x, y]] (pixel coordinates) <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19315,8 +19464,6 @@
                         "ring_anchor_point": {
                           "type": "array",
                           "description": "The anchor point of the ring image, marking the 2 farthest points along the inner edge of the ring <br>Type: 2x2 list of integers <br>Range: 2 (x, y) pixel coordinates <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19337,17 +19484,13 @@
                             2,
                             3,
                             4
-                          ],
-                          "default": null,
-                          "example": null
+                          ]
                         },
                         "ring_wearing_location": {
                           "type": "number",
                           "description": "Defines the placement of the ring on the selected finger in the user photo. <br>Range: 0.0 ~ 1.0(0 = base of the finger, 1 = first knuckle)",
                           "minimum": 0,
-                          "maximum": 1,
-                          "default": null,
-                          "example": null
+                          "maximum": 1
                         },
                         "ring_shadow_intensity": {
                           "type": "number",
@@ -19399,8 +19542,6 @@
                         "bracelet_anchor_point": {
                           "type": "array",
                           "description": "The anchor point of the bracelet image, marking the 2 farthest points along the inner edge of the bracelet <br>Type: 2x2 list of integers <br>Range: 2 (x, y) pixel coordinates <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 2,
                           "maxItems": 2,
                           "items": {
@@ -19416,9 +19557,7 @@
                           "type": "number",
                           "description": "Defines the placement of the bracelet on the wrist in the user photo. <br>Range: -0.3 ~ 1.0 (0 = closest to the wrist joint) <br>       (smaller number = placed close to the palm <br>       larger number = placed further away from the wrist) <br>Default: null (use engine default)",
                           "minimum": -0.3,
-                          "maximum": 1,
-                          "default": null,
-                          "example": null
+                          "maximum": 1
                         },
                         "bracelet_shadow_intensity": {
                           "type": "number",
@@ -19470,8 +19609,6 @@
                         "watch_anchor_point": {
                           "type": "array",
                           "description": "First 2 points mark the strap end when worn. Remaining 2 points mark the upper & lower edges of watch case. <br>Type: 4x2 list of integers <br>Range: 4 (x, y) pixel coordinates <br>Default: null (use engine default)",
-                          "default": null,
-                          "example": null,
                           "minItems": 4,
                           "maxItems": 4,
                           "items": {
@@ -19487,9 +19624,7 @@
                           "type": "number",
                           "description": "Defines the placement of the watch on the wrist in the user photo. <br>Range: -0.3 ~ 1.0 (0 = closest to the wrist joint) <br>       (smaller number = placed close to the palm <br>       larger number = placed further away from the wrist) <br>Default: null (use engine default)",
                           "minimum": -0.3,
-                          "maximum": 1,
-                          "default": null,
-                          "example": null
+                          "maximum": 1
                         },
                         "watch_shadow_intensity": {
                           "type": "number",
@@ -19811,7 +19946,7 @@
                         "url": {
                           "type": "string",
                           "description": "URL to download this result. Valid for 2 hours",
-                          "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIARB77EV5YXEKPIQMM%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
+                          "example": "https://s3-us-west-2.amazonaws.com/yce-us/gst_tsk/a29e54f4-03a8-4ff1-9226-d6c83ae86053/34516942129/cf4d1764-4517-44af-aed8-fc78fc186072.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240101T120225Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20240101%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f199a5da82b0b171d873098ab91473f57a872e3b6cfa58ff6ca24e48617fabc0"
                         },
                         "res_age": {
                           "type": "integer",
@@ -21419,6 +21554,32 @@
             }
           ]
         }
+      },
+      "RunError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Response status",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message",
+            "example": "The operation could not be completed"
+          },
+          "error_code": {
+            "type": "string",
+            "enum": [
+              "CreditInsufficiency",
+              "InvalidStyleGroup",
+              "InvalidStyle",
+              "BadRequest",
+              "InvalidParameters"
+            ],
+            "description": "Error code:\n  * CreditInsufficiency - Insufficient unit to run\n  * BadRequest - Unexpected request parameter\n  * InvalidStyleGroup - Invalid style group id\n  * InvalidStyle - Invalid style id\n  * InvalidParameters - Invalid request parameters\n"
+          }
+        }
       }
     },
     "responses": {
@@ -21586,32 +21747,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "RunError": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "integer",
-            "description": "Response status",
-            "example": 400
-          },
-          "error": {
-            "type": "string",
-            "description": "Error message",
-            "example": "The operation could not be completed"
-          },
-          "error_code": {
-            "type": "string",
-            "enum": [
-              "CreditInsufficiency",
-              "InvalidStyleGroup",
-              "InvalidStyle",
-              "BadRequest",
-              "InvalidParameters"
-            ],
-            "description": "Error code:\n  * CreditInsufficiency - Insufficient unit to run\n  * BadRequest - Unexpected request parameter\n  * InvalidStyleGroup - Invalid style group id\n  * InvalidStyle - Invalid style id\n  * InvalidParameters - Invalid request parameters\n"
           }
         }
       },

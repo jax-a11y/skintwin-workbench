@@ -27,7 +27,7 @@ The system uses alchemical concepts to make tensor transformations intuitive:
 
 ### Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │           Reactor Vessel                    │
 │  ┌───────────────────────────────────────┐  │
@@ -126,7 +126,7 @@ The vessel provides a safe, monitored execution environment with resource tracki
 
 #### Reactor States
 
-```
+```text
 IDLE → PREPARING → TRANSMUTING → STABILIZING → COMPLETE
                                               ↓
                                             ERROR
@@ -423,6 +423,7 @@ npm run test:alchemist
 ```
 
 The test suite validates:
+
 - ✅ Engine registration and retrieval
 - ✅ Transformation pipelines
 - ✅ Activation functions

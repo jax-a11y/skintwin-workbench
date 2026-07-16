@@ -27,6 +27,7 @@
   "paths": {
     "/shopify/app/install": {
       "post": {
+        "operationId": "registerShopifyInstallation",
         "tags": [
           "shopify"
         ],
@@ -57,6 +58,7 @@
     },
     "/shopify/webhooks/orders-created": {
       "post": {
+        "operationId": "handleOrdersCreatedWebhook",
         "tags": [
           "shopify",
           "mrp"
@@ -81,6 +83,7 @@
     },
     "/mrp/plans": {
       "post": {
+        "operationId": "createMrpPlan",
         "tags": [
           "mrp"
         ],
@@ -111,6 +114,7 @@
     },
     "/scm/purchase-orders": {
       "post": {
+        "operationId": "createPurchaseOrders",
         "tags": [
           "scm"
         ],
@@ -141,6 +145,7 @@
     },
     "/scm/fulfillment-events": {
       "post": {
+        "operationId": "recordFulfillmentEvent",
         "tags": [
           "scm",
           "shopify"
