@@ -9,10 +9,10 @@ This document presents a comprehensive analysis of several platforms within the 
 
 The core discovery is the identification of four key pillars of the modern beauty-tech stack:
 
-1.  **AI-Powered Diagnostics:** Represented by **Perfect Corp**, providing medical-grade, API-accessible skin analysis.
-2.  **Two-Sided Marketplaces:** Exemplified by the **MioSalon/Welns.io** duo, which combines a B2B SaaS management platform for salons with a B2C booking marketplace for consumers.
-3.  **White-Label Manufacturing & Dropshipping:** Embodied by **ViaGlamour**, which offers custom formulation and direct-to-consumer fulfillment via a Shopify app.
-4.  **Regional Marketplaces:** Illustrated by **GoBeauty.co.za**, which provides a blueprint for localized consumer-facing service platforms.
+1. **AI-Powered Diagnostics:** Represented by **Perfect Corp**, providing medical-grade, API-accessible skin analysis.
+2. **Two-Sided Marketplaces:** Exemplified by the **MioSalon/Welns.io** duo, which combines a B2B SaaS management platform for salons with a B2C booking marketplace for consumers.
+3. **White-Label Manufacturing & Dropshipping:** Embodied by **ViaGlamour**, which offers custom formulation and direct-to-consumer fulfillment via a Shopify app.
+4. **Regional Marketplaces:** Illustrated by **GoBeauty.co.za**, which provides a blueprint for localized consumer-facing service platforms.
 
 This analysis proposes that the Alchemist Workbench acts as the intelligent core, using its tensor transformation capabilities to process data from these pillars and generate personalized "elixirs"—not just as data outputs, but as actionable recipes for custom product formulations and treatment plans.
 
@@ -55,7 +55,8 @@ graph TD
 
     G -- Provides Feedback/New Data --> B
 ```
-*Figure 1: Proposed integration workflow for the SkinTwin Cognitive Alchemist Workbench.* 
+
+*Figure 1: Proposed integration workflow for the SkinTwin Cognitive Alchemist Workbench.*
 
 ## 3. Proposed Integration with Alchemist Workbench
 
@@ -65,9 +66,9 @@ The **Alchemist Engine**, with its framework of `Elixirs`, `Tensors`, and `React
 
 The initial state would involve ingesting data from the various platforms as input `tensors` for the Alchemist Engine:
 
--   **Primary Diagnostic Tensor:** The rich, multi-dimensional data from a **Perfect Corp** AI Skin Analysis becomes the primary input. This is not a single value but a complex tensor representing the 16 skin concerns (spots, wrinkles, moisture, etc.), skin type, and skin age.
--   **Client History Tensor:** Data from a platform like **MioSalon** (accessed via API) would form a secondary tensor, providing historical context such as past treatments, product purchase history, and appointment frequency.
--   **Market Context Tensor:** Aggregated, anonymized data from marketplaces like **Welns.io** or **GoBeauty** could provide a third tensor representing market trends, popular ingredients, or regional environmental factors.
+- **Primary Diagnostic Tensor:** The rich, multi-dimensional data from a **Perfect Corp** AI Skin Analysis becomes the primary input. This is not a single value but a complex tensor representing the 16 skin concerns (spots, wrinkles, moisture, etc.), skin type, and skin age.
+- **Client History Tensor:** Data from a platform like **MioSalon** (accessed via API) would form a secondary tensor, providing historical context such as past treatments, product purchase history, and appointment frequency.
+- **Market Context Tensor:** Aggregated, anonymized data from marketplaces like **Welns.io** or **GoBeauty** could provide a third tensor representing market trends, popular ingredients, or regional environmental factors.
 
 ### 3.2. The "Skincare Elixir": A Transformation Recipe
 
@@ -75,30 +76,30 @@ The core logic resides in a series of "elixirs"—transformation recipes registe
 
 **Example `Skincare Elixir` Pipeline:**
 
-1.  **Step 1: Diagnostic Fusion:** The elixir's first step fuses the **Primary Diagnostic Tensor** with the **Client History Tensor**. It correlates the current AI-detected skin concerns with past treatments to identify recurring issues or measure the efficacy of previous interventions.
+1. **Step 1: Diagnostic Fusion:** The elixir's first step fuses the **Primary Diagnostic Tensor** with the **Client History Tensor**. It correlates the current AI-detected skin concerns with past treatments to identify recurring issues or measure the efficacy of previous interventions.
 
-2.  **Step 2: Causal Inference:** The engine applies a custom function to identify potential causal relationships. For example, it might correlate high `oiliness` and `acne` scores with a client's frequent use of a known comedogenic product from their purchase history.
+2. **Step 2: Causal Inference:** The engine applies a custom function to identify potential causal relationships. For example, it might correlate high `oiliness` and `acne` scores with a client's frequent use of a known comedogenic product from their purchase history.
 
-3.  **Step 3: Ingredient Mapping:** The transformed tensor, now representing a refined understanding of the user's skin needs, is passed through a mapping function. This step translates skin concern scores into a required ingredient profile (e.g., `redness > 0.8` maps to `Niacinamide: 5%`, `moisture < 0.3` maps to `Hyaluronic Acid: 2%`).
+3. **Step 3: Ingredient Mapping:** The transformed tensor, now representing a refined understanding of the user's skin needs, is passed through a mapping function. This step translates skin concern scores into a required ingredient profile (e.g., `redness > 0.8` maps to `Niacinamide: 5%`, `moisture < 0.3` maps to `Hyaluronic Acid: 2%`).
 
-4.  **Step 4: Formulation Generation:** The ingredient profile is processed to generate a final product formula. This step leverages **ViaGlamour's** catalog of 800+ base formulas and available ingredients, ensuring the generated formula is manufacturable. The output is a structured JSON object representing the custom product recipe.
+4. **Step 4: Formulation Generation:** The ingredient profile is processed to generate a final product formula. This step leverages **ViaGlamour's** catalog of 800+ base formulas and available ingredients, ensuring the generated formula is manufacturable. The output is a structured JSON object representing the custom product recipe.
 
-5.  **Step 5: Treatment Plan Generation:** In parallel, the engine generates a recommended treatment plan, suggesting professional services available on **Welns.io** or **GoBeauty** that complement the custom-formulated product.
+5. **Step 5: Treatment Plan Generation:** In parallel, the engine generates a recommended treatment plan, suggesting professional services available on **Welns.io** or **GoBeauty** that complement the custom-formulated product.
 
 ### 3.3. Actionable Outputs: From Tensor to Tangible Product
 
 The final output of the Alchemist Engine is not just data, but an actionable command.
 
--   **ViaGlamour API Call:** The generated product formula is sent directly to the **ViaGlamour API**. This triggers the manufacturing and dropshipping of a unique, personalized skincare product, complete with custom branding, directly to the consumer.
--   **MioSalon/Welns.io Integration:** The recommended treatment plan can be used to automatically suggest or even book appointments at a local salon through the **Welns.io** marketplace, with the details logged in the client's **MioSalon** profile.
+- **ViaGlamour API Call:** The generated product formula is sent directly to the **ViaGlamour API**. This triggers the manufacturing and dropshipping of a unique, personalized skincare product, complete with custom branding, directly to the consumer.
+- **MioSalon/Welns.io Integration:** The recommended treatment plan can be used to automatically suggest or even book appointments at a local salon through the **Welns.io** marketplace, with the details logged in the client's **MioSalon** profile.
 
 ## 4. Strategic Implications
 
 This integrated system represents a significant leap beyond simple product recommendations. It creates a closed-loop, learning ecosystem where every interaction provides new data to refine the Alchemist Engine's future transformations.
 
--   **Hyper-Personalization at Scale:** Moves from segment-based recommendations to true one-to-one personalization for both products and services.
--   **Data-Driven Product Development:** Anonymized data can reveal unmet needs in the market, guiding the development of new base formulas for ViaGlamour.
--   **End-to-End Value Chain Ownership:** By integrating these four pillars, SkinTwin can orchestrate the entire customer journey, from the initial spark of interest to the delivery of a physical product and the booking of a professional service.
+- **Hyper-Personalization at Scale:** Moves from segment-based recommendations to true one-to-one personalization for both products and services.
+- **Data-Driven Product Development:** Anonymized data can reveal unmet needs in the market, guiding the development of new base formulas for ViaGlamour.
+- **End-to-End Value Chain Ownership:** By integrating these four pillars, SkinTwin can orchestrate the entire customer journey, from the initial spark of interest to the delivery of a physical product and the booking of a professional service.
 
 ## 5. Conclusion and Next Steps
 
@@ -106,9 +107,9 @@ The research confirms that the components for a revolutionary, AI-driven beauty-
 
 **Recommended Next Steps:**
 
-1.  **API Validation:** Prioritize a technical deep-dive into the **Perfect Corp (YouCam) API** using the provided `openapi.json` specification to validate the data structure of the skin analysis output.
-2.  **Partnership Exploration:** Initiate strategic discussions with **ViaGlamour** to understand the parameters and constraints of their custom formulation API.
-3.  **Pilot Elixir Development:** Begin development of a proof-of-concept `Skincare Elixir` within the Alchemist Engine, using mock data based on the Perfect Corp API to simulate the transformation pipeline.
+1. **API Validation:** Prioritize a technical deep-dive into the **Perfect Corp (YouCam) API** using the provided `openapi.json` specification to validate the data structure of the skin analysis output.
+2. **Partnership Exploration:** Initiate strategic discussions with **ViaGlamour** to understand the parameters and constraints of their custom formulation API.
+3. **Pilot Elixir Development:** Begin development of a proof-of-concept `Skincare Elixir` within the Alchemist Engine, using mock data based on the Perfect Corp API to simulate the transformation pipeline.
 
 By taking these steps, the SkinTwin project can move from a conceptual framework to a powerful, market-ready platform that truly embodies the promise of cognitive alchemy.
 
@@ -116,20 +117,20 @@ By taking these steps, the SkinTwin project can move from a conceptual framework
 
 ### References
 
-[1] MioSalon. (2026). *Salon and Spa Software*. Retrieved from https://www.miosalon.com/
+[1] MioSalon. (2026). *Salon and Spa Software*. Retrieved from <https://www.miosalon.com/>
 
-[2] Welns.io. (2026). *Search salons nearby*. Retrieved from https://www.welns.io/
+[2] Welns.io. (2026). *Search salons nearby*. Retrieved from <https://www.welns.io/>
 
-[3] GoBeauty. (2026). *Your Favourite Salons and Spas in your pocket*. Retrieved from https://gobeauty.co.za/
+[3] GoBeauty. (2026). *Your Favourite Salons and Spas in your pocket*. Retrieved from <https://gobeauty.co.za/>
 
-[4] viaGlamour. (2026). *viaGlamour Cosmetics Lab*. Retrieved from https://viaglamour.com/
+[4] viaGlamour. (2026). *viaGlamour Cosmetics Lab*. Retrieved from <https://viaglamour.com/>
 
-[5] Shopify App Store. (2026). *viaGlamour | Dropship Skincare*. Retrieved from https://apps.shopify.com/viaglamour-start-your-makeup-line
+[5] Shopify App Store. (2026). *viaGlamour | Dropship Skincare*. Retrieved from <https://apps.shopify.com/viaglamour-start-your-makeup-line>
 
-[6] Perfect Corp. (2026). *AI Skin Analysis & Face Mapping & Diagnostic for Skincare Routines*. Retrieved from https://www.perfectcorp.com/business/products/ai-skin-diagnostic
+[6] Perfect Corp. (2026). *AI Skin Analysis & Face Mapping & Diagnostic for Skincare Routines*. Retrieved from <https://www.perfectcorp.com/business/products/ai-skin-diagnostic>
 
-[7] Perfect Corp. (2026). *Skin Analysis Online Tool & App*. Retrieved from https://www.perfectcorp.com/business/showcase/skincare/home
+[7] Perfect Corp. (2026). *Skin Analysis Online Tool & App*. Retrieved from <https://www.perfectcorp.com/business/showcase/skincare/home>
 
-[8] Perfect Corp. (2026). *Skincare Pro | AI Skin Scanner for Skincare Recommendation*. Retrieved from https://www.perfectcorp.com/business/solutions/online-service/skincare-pro
+[8] Perfect Corp. (2026). *Skincare Pro | AI Skin Scanner for Skincare Recommendation*. Retrieved from <https://www.perfectcorp.com/business/solutions/online-service/skincare-pro>
 
-[9] Perfect Corp. (2026). *Beauty AR Company and Makeup AR Technology Platform*. Retrieved from https://www.perfectcorp.com/business/plan?functionType=SKINCARE_PRO
+[9] Perfect Corp. (2026). *Beauty AR Company and Makeup AR Technology Platform*. Retrieved from <https://www.perfectcorp.com/business/plan?functionType=SKINCARE_PRO>

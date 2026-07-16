@@ -16,10 +16,9 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: 'coverage/e2e',
     },
-    reporters: ['verbose', 'json', 'html'],
+    reporters: ['verbose', 'json'],
     outputFile: {
       json: 'test-results/e2e-results.json',
-      html: 'test-results/e2e-results.html',
     },
     pool: 'forks',
     poolOptions: {
